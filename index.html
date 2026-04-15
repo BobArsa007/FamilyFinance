@@ -37,28 +37,57 @@
         table thead {
             background-color: #111113;
         }
+
+        /* Enhanced Title Styling */
+        .header-title {
+            font-size: 2.75rem;
+            line-height: 1.05;
+            letter-spacing: -2px;
+        }
     </style>
 </head>
 <body class="text-slate-200 antialiased p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
         
-        <!-- Header -->
-        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
-            <div>
-                <h1 class="text-4xl font-semibold text-white tracking-tighter">Manajemen Finansial</h1>
-                <p class="text-zinc-400 mt-1 text-lg">Ringkasan arus kas keluarga • Mama & Pakde</p>
+        <!-- Header with Refined Title -->
+        <header class="mb-10 border-b border-zinc-800 pb-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                
+                <!-- Title Section - Redesigned -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="h-px w-8 bg-gradient-to-r from-transparent via-violet-400 to-transparent"></div>
+                        <span class="uppercase text-xs font-medium tracking-[1.5px] text-violet-400">KELUARGA</span>
+                        <div class="h-px flex-1 bg-gradient-to-r from-violet-400 to-transparent"></div>
+                    </div>
+                    
+                    <h1 class="header-title font-semibold text-white">
+                        Manajemen Finansial
+                    </h1>
+                    
+                    <div class="mt-3 flex items-center gap-3 text-zinc-400">
+                        <p class="text-2xl font-light tracking-tight">
+                            Ringkasan arus kas keluarga
+                        </p>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-violet-400 text-3xl leading-none">•</span>
+                            <span class="text-2xl font-medium text-white">Mama &amp; Pakde</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button onclick="resetData()" 
+                        class="flex items-center gap-2 px-6 py-3 text-sm font-medium bg-zinc-900 hover:bg-red-950 border border-zinc-700 hover:border-red-800 text-red-400 hover:text-red-300 rounded-3xl transition-all self-start md:self-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0a8 8 0 01-7.714-6.19" />
+                    </svg>
+                    Reset ke Data Awal
+                </button>
             </div>
-            
-            <button onclick="resetData()" 
-                    class="flex items-center gap-2 px-6 py-3 text-sm font-medium bg-zinc-900 hover:bg-red-950 border border-zinc-700 hover:border-red-800 text-red-400 hover:text-red-300 rounded-3xl transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0a8 8 0 01-7.714-6.19" />
-                </svg>
-                Reset ke Data Awal
-            </button>
         </header>
 
-        <!-- Summary Cards - Black Theme -->
+        <!-- Summary Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             
             <!-- Saldo Mama -->
@@ -152,7 +181,6 @@
                 </div>
             </div>
 
-            <!-- Tabel Mama -->
             <div class="bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden">
                 <div class="overflow-x-auto max-h-[620px]">
                     <table class="w-full text-left text-sm">
@@ -203,7 +231,6 @@
                 </div>
             </div>
 
-            <!-- Tabel Pakde -->
             <div class="bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden">
                 <div class="overflow-x-auto max-h-[620px]">
                     <table class="w-full text-left text-sm">
