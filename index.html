@@ -1,0 +1,321 @@
+import pandas as pd
+import json
+
+# Load the data
+mama_pakde_df = pd.read_csv('Spreadsheet Manajemen Finansial.xlsx - Keuangan Keluarga.csv')
+hutang_df = pd.read_csv('Spreadsheet Manajemen Finansial.xlsx - Manajemen Hutang.csv')
+
+# --- PROCESS KEUANGAN KELUARGA ---
+# Mama's data is cols 0-5. Pakde's is 7-12.
+def clean_ledger(df, start_col, end_col):
+    subset = df.iloc[1:, start_col:end_col+1].copy()
+    subset.columns = ['Tanggal', 'Deskripsi', 'Kategori', 'Pemasukan', 'Pengeluaran', 'Saldo']
+    subset = subset.dropna(subset=['Tanggal', 'Deskripsi', 'Saldo'], how='all')
+    return subset.to_dict(orient='records')
+
+mama_data = clean_ledger(mama_pakde_df, 0, 5)
+pakde_data = clean_ledger(mama_pakde_df, 7, 12)
+
+# Calculate totals for summary cards
+def get_latest_balance(data):
+    for row in reversed(data):
+        if pd.notnull(row.get('Saldo')):
+            try:
+                return float(str(row['Saldo']).replace(',', ''))
+            except:
+                continue
+    return 0
+
+mama_balance = get_latest_balance(mama_data)
+pakde_balance = get_latest_balance(pakde_data)
+
+# --- PROCESS MANAJEMEN HUTANG ---
+# PLN is cols 0-2 (header at row 2). Bank Jateng is cols 4-7.
+pln_raw = hutang_df.iloc[2:, 0:3].copy()
+pln_raw.columns = ['No', 'Bulan', 'Nominal']
+pln_data = pln_raw.dropna(subset=['Nominal']).to_dict(orient='records')
+
+bank_raw = hutang_df.iloc[2:, 4:8].copy()
+bank_raw.columns = ['No', 'Bulan', 'Nominal', 'Status']
+bank_data = bank_raw.dropna(subset=['Nominal']).to_dict(orient='records')
+
+def calc_remaining(data):
+    total = 0
+    for row in data:
+        status = str(row.get('Status', '')).upper()
+        if status != 'LUNAS':
+            try:
+                total += float(str(row['Nominal']).replace(',', ''))
+            except:
+                continue
+    return total
+
+total_debt = calc_remaining(pln_data) + calc_remaining(bank_data)
+
+# --- CONSTRUCT HTML ---
+html_content = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Management Dashboard</title>
+    <style>
+        :root {{
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #1e293b;
+        }}
+        body {{
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }}
+        .container {{
+            max-width: 1200px;
+            margin: 0 auto;
+        }}
+        header {{
+            margin-bottom: 30px;
+        }}
+        h1 {{ margin: 0; font-size: 24px; }}
+        .summary-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }}
+        .card {{
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }}
+        .card-label {{ font-size: 13px; color: var(--secondary); text-transform: uppercase; font-weight: 600; }}
+        .card-value {{ font-size: 24px; font-weight: 700; margin-top: 8px; }}
+        .val-blue {{ color: var(--primary); }}
+        .val-green {{ color: var(--success); }}
+        .val-red {{ color: var(--danger); }}
+
+        .tabs {{
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }}
+        .tab-btn {{
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--secondary);
+            border-radius: 6px;
+        }}
+        .tab-btn.active {{
+            background: var(--primary);
+            color: white;
+        }}
+
+        .tab-content {{ display: none; }}
+        .tab-content.active {{ display: block; }}
+
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }}
+        th {{
+            background: #f1f5f9;
+            text-align: left;
+            padding: 12px;
+            font-size: 13px;
+            color: var(--secondary);
+        }}
+        td {{
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }}
+        .status-pill {{
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }}
+        .status-lunas {{ background: #d1fae5; color: #065f46; }}
+        .status-pending {{ background: #fee2e2; color: #991b1b; }}
+
+        .debt-section {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }}
+        @media (max-width: 768px) {{
+            .debt-section {{ grid-template-columns: 1fr; }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Financial Management Tool</h1>
+            <p style="color: var(--secondary); margin-top: 5px;">Tracking and analytics for family accounts and debts.</p>
+        </header>
+
+        <div class="summary-grid">
+            <div class="card">
+                <div class="card-label">Saldo Mama</div>
+                <div class="card-value val-blue">Rp {mama_balance:,.0f}</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Saldo Pakde Fajar</div>
+                <div class="card-value val-green">Rp {pakde_balance:,.0f}</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Total Sisa Hutang</div>
+                <div class="card-value val-red">Rp {total_debt:,.0f}</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'mama')">Uang Mama</button>
+            <button class="tab-btn" onclick="openTab(event, 'pakde')">Pakde Fajar</button>
+            <button class="tab-btn" onclick="openTab(event, 'debt')">Manajemen Hutang</button>
+        </div>
+
+        <div id="mama" class="tab-content active">
+            <div class="card">
+                <h3>Log Transaksi Mama</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Deskripsi</th>
+                                <th>Pemasukan</th>
+                                <th>Pengeluaran</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mama-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="pakde" class="tab-content">
+            <div class="card">
+                <h3>Log Transaksi Pakde Fajar</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Deskripsi</th>
+                                <th>Pemasukan</th>
+                                <th>Pengeluaran</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pakde-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="debt" class="tab-content">
+            <div class="debt-section">
+                <div class="card">
+                    <h3>Hutang PLN</h3>
+                    <table>
+                        <thead>
+                            <tr><th>No</th><th>Bulan</th><th>Nominal</th></tr>
+                        </thead>
+                        <tbody id="pln-body"></tbody>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3>Hutang Bank Jateng</h3>
+                    <table>
+                        <thead>
+                            <tr><th>No</th><th>Bulan</th><th>Nominal</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="bank-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mamaData = {json.dumps(mama_data)};
+        const pakdeData = {json.dumps(pakde_data)};
+        const plnData = {json.dumps(pln_data)};
+        const bankData = {json.dumps(bank_data)};
+
+        function formatCurrency(val) {{
+            if (!val || isNaN(val)) return '-';
+            return 'Rp ' + parseFloat(val).toLocaleString();
+        }}
+
+        function populateTable(data, elementId, isDebt = false) {{
+            const body = document.getElementById(elementId);
+            data.forEach(row => {{
+                const tr = document.createElement('tr');
+                if (!isDebt) {{
+                    tr.innerHTML = `
+                        <td>${{row.Tanggal || ''}}</td>
+                        <td>${{row.Deskripsi || ''}}</td>
+                        <td class="val-green">${{formatCurrency(row.Pemasukan)}}</td>
+                        <td class="val-red">${{formatCurrency(row.Pengeluaran)}}</td>
+                        <td style="font-weight: 600;">${{formatCurrency(row.Saldo)}}</td>
+                    `;
+                }} else {{
+                    const statusClass = row.Status === 'LUNAS' ? 'status-lunas' : 'status-pending';
+                    const statusHtml = row.Status ? `<span class="status-pill ${{statusClass}}">${{row.Status}}</span>` : '';
+                    tr.innerHTML = `
+                        <td>${{row.No || ''}}</td>
+                        <td>${{row.Bulan || ''}}</td>
+                        <td>${{formatCurrency(row.Nominal)}}</td>
+                        ${{row.Status !== undefined ? `<td>${{statusHtml}}</td>` : ''}}
+                    `;
+                }}
+                body.appendChild(tr);
+            }});
+        }}
+
+        populateTable(mamaData.slice(1), 'mama-body');
+        populateTable(pakdeData.slice(1), 'pakde-body');
+        populateTable(plnData, 'pln-body', true);
+        populateTable(bankData, 'bank-body', true);
+
+        function openTab(evt, tabName) {{
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {{
+                tabcontent[i].classList.remove("active");
+            }}
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {{
+                tablinks[i].classList.remove("active");
+            }}
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }}
+    </script>
+</body>
+</html>
+"""
+
+with open('finance_management_tool.html', 'w') as f:
+    f.write(html_content)
