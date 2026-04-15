@@ -12,25 +12,27 @@
         .tab-content.active { display: block; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        input, select { outline: none; }
+        input:focus, select:focus { border-color: #3b82f6; ring: 2px; }
     </style>
 </head>
 <body class="text-slate-800 antialiased p-4 md:p-8">
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Manajemen Finansial</h1>
-                <p class="text-slate-500 mt-1">Ringkasan arus kas keluarga dan manajemen hutang.</p>
+                <p class="text-slate-500 mt-1">Ringkasan arus kas keluarga (Mama & Pakde).</p>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-center relative overflow-hidden">
                 <div class="absolute top-0 right-0 p-4 opacity-10">
                     <svg class="w-16 h-16 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
                 </div>
                 <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Sisa Saldo Mama</h3>
-                <p class="text-3xl font-bold text-blue-600 mt-2">Rp 380.228</p>
+                <p class="text-3xl font-bold text-blue-600 mt-2" id="saldo-mama-text">Rp 0</p>
             </div>
 
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-center relative overflow-hidden">
@@ -38,15 +40,7 @@
                     <svg class="w-16 h-16 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
                 </div>
                 <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Sisa Saldo Pakde</h3>
-                <p class="text-3xl font-bold text-emerald-600 mt-2">Rp 21.092.301</p>
-            </div>
-
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <svg class="w-16 h-16 text-rose-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                </div>
-                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Sisa Hutang</h3>
-                <p class="text-3xl font-bold text-rose-600 mt-2">Rp 97.830.020</p>
+                <p class="text-3xl font-bold text-emerald-600 mt-2" id="saldo-pakde-text">Rp 0</p>
             </div>
         </div>
 
@@ -57,12 +51,20 @@
             <button class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700 hover:bg-white/50" onclick="switchTab(event, 'tab-pakde')">
                 Buku Kas Pakde
             </button>
-            <button class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700 hover:bg-white/50" onclick="switchTab(event, 'tab-hutang')">
-                Manajemen Hutang
-            </button>
         </div>
 
         <div id="tab-mama" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden p-6 mb-4">
+                <h3 class="text-sm font-bold text-slate-800 mb-4">Tambah Transaksi Baru</h3>
+                <div class="flex flex-col md:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full"><label class="text-xs text-slate-500 mb-1 block">Tanggal</label><input type="date" id="mama-date" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"></div>
+                    <div class="flex-[2] w-full"><label class="text-xs text-slate-500 mb-1 block">Deskripsi</label><input type="text" id="mama-desc" placeholder="Contoh: Belanja Bulanan" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"></div>
+                    <div class="flex-1 w-full"><label class="text-xs text-slate-500 mb-1 block">Tipe</label><select id="mama-type" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"><option value="pengeluaran">Pengeluaran</option><option value="pemasukan">Pemasukan</option></select></div>
+                    <div class="flex-1 w-full"><label class="text-xs text-slate-500 mb-1 block">Nominal (Rp)</label><input type="number" id="mama-amount" placeholder="50000" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"></div>
+                    <div class="w-full md:w-auto"><button onclick="addTransaction('mama')" class="w-full bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-bold shadow-sm">Simpan</button></div>
+                </div>
+            </div>
+
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
                     <table class="w-full text-left text-sm whitespace-nowrap">
@@ -82,6 +84,17 @@
         </div>
 
         <div id="tab-pakde" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden p-6 mb-4">
+                <h3 class="text-sm font-bold text-slate-800 mb-4">Tambah Transaksi Baru</h3>
+                <div class="flex flex-col md:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full"><label class="text-xs text-slate-500 mb-1 block">Tanggal</label><input type="date" id="pakde-date" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"></div>
+                    <div class="flex-[2] w-full"><label class="text-xs text-slate-500 mb-1 block">Deskripsi</label><input type="text" id="pakde-desc" placeholder="Contoh: Uang Bensin" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"></div>
+                    <div class="flex-1 w-full"><label class="text-xs text-slate-500 mb-1 block">Tipe</label><select id="pakde-type" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"><option value="pengeluaran">Pengeluaran</option><option value="pemasukan">Pemasukan</option></select></div>
+                    <div class="flex-1 w-full"><label class="text-xs text-slate-500 mb-1 block">Nominal (Rp)</label><input type="number" id="pakde-amount" placeholder="50000" class="w-full rounded-md border-slate-300 shadow-sm text-sm px-3 py-2 border bg-slate-50"></div>
+                    <div class="w-full md:w-auto"><button onclick="addTransaction('pakde')" class="w-full bg-emerald-600 text-white px-6 py-2 rounded-md hover:bg-emerald-700 transition-colors text-sm font-bold shadow-sm">Simpan</button></div>
+                </div>
+            </div>
+
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
                     <table class="w-full text-left text-sm whitespace-nowrap">
@@ -100,64 +113,37 @@
             </div>
         </div>
 
-        <div id="tab-hutang" class="tab-content">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                        <h2 class="text-lg font-bold text-slate-800">Pinjaman Bank Jateng</h2>
-                    </div>
-                    <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                        <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-50/90 text-slate-500 border-b border-slate-100 sticky top-0 backdrop-blur">
-                                <tr>
-                                    <th class="px-6 py-3 font-semibold">Bulan</th>
-                                    <th class="px-6 py-3 font-semibold text-right">Nominal</th>
-                                    <th class="px-6 py-3 font-semibold text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="body-bank" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                        <h2 class="text-lg font-bold text-slate-800">Riwayat Hutang PLN</h2>
-                    </div>
-                    <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                        <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-50/90 text-slate-500 border-b border-slate-100 sticky top-0 backdrop-blur">
-                                <tr>
-                                    <th class="px-6 py-3 font-semibold">Bulan</th>
-                                    <th class="px-6 py-3 font-semibold text-right">Nominal</th>
-                                    <th class="px-6 py-3 font-semibold text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="body-pln" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        const dataMama = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Uang Belanja", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 61789281.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Ambil Uang Sangu Cash", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 61739281.0}, {"Tanggal": "9 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 61439281.0}, {"Tanggal": "16 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60939281.0}, {"Tanggal": "1 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 60639281.0}, {"Tanggal": "5 Maret 2025", "Deskripsi": "Cash 300, Brimo TF 200", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60139281.0}, {"Tanggal": "10 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59639281.0}, {"Tanggal": "11 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59139281.0}, {"Tanggal": "19 Maret 2025", "Deskripsi": "Ambil Uang Pulang Sukoharjo", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 57639281.0}, {"Tanggal": "21 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 54139281.0}, {"Tanggal": "26 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 53139281.0}, {"Tanggal": "2025-04-25", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3501839.0, "Saldo": 49637442.0}, {"Tanggal": "15 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 10001656.0, "Saldo": 39635786.0}, {"Tanggal": "30 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 39335786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 36835786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3196.0, "Saldo": 36832590.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 36332590.0}, {"Tanggal": "14 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 35832590.0}, {"Tanggal": "19 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 35532590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 33032590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3656.0, "Saldo": 33028934.0}, {"Tanggal": "04 Agustus 2025", "Deskripsi": "Servis Mobil", "Pemasukan": 0, "Pengeluaran": 2150000.0, "Saldo": 30878934.0}, {"Tanggal": "09 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 700000.0, "Saldo": 30178934.0}, {"Tanggal": "14 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 29878934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 29378934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3956.0, "Saldo": 29374978.0}, {"Tanggal": "22 Agustus 2025", "Deskripsi": "Bayar Angsuran + Listrik+PDAM", "Pemasukan": 0, "Pengeluaran": 3000000.0, "Saldo": 26374978.0}, {"Tanggal": "27 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 25874978.0}, {"Tanggal": "28 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 24874978.0}, {"Tanggal": "30 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24374978.0}, {"Tanggal": "2025-09-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23874978.0}, {"Tanggal": "2025-09-02", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23374978.0}, {"Tanggal": "2025-09-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 20874978.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 20674978.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Uang Pinjam Mbak Santi", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 19674978.0}, {"Tanggal": "2025-10-04", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 19374978.0}, {"Tanggal": "2025-10-05", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 18974978.0}, {"Tanggal": "2025-10-08", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 18474978.0}, {"Tanggal": "2025-10-13", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 18174978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 17774978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 214000.0, "Saldo": 17560978.0}, {"Tanggal": "2025-10-17", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 16560978.0}, {"Tanggal": "2025-10-16", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 215200.0, "Saldo": 16345778.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 16295778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 13795778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 13595778.0}, {"Tanggal": "2025-11-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 518100.0, "Saldo": 13077678.0}, {"Tanggal": "2025-11-11", "Deskripsi": "Bayar Denda PLN", "Pemasukan": 0, "Pengeluaran": 6801750.0, "Saldo": 6275928.0}, {"Tanggal": "2025-11-05", "Deskripsi": "Bobby Narik ATM", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 6225928.0}, {"Tanggal": "2025-11-23", "Deskripsi": "Transfer Bayar Bank Jateng", "Pemasukan": 0, "Pengeluaran": 2400000.0, "Saldo": 3825928.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Pembayaran tagihan PLN, PDAM, dan Bank Jateng via pindah rekening.", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 325928.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Handoko Bayar Kontrakan", "Pemasukan": 15000000.0, "Pengeluaran": 0, "Saldo": 15325928.0}, {"Tanggal": "2025-01-02", "Deskripsi": "Servis LCD Laptop", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 15025928.0}, {"Tanggal": "2025-01-24", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 14525928.0}, {"Tanggal": "2025-01-16", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 250000.0, "Saldo": 14275928.0}, {"Tanggal": "2025-01-26", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 137000.0, "Saldo": 14138928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Ambil Uang Sangu Piknik", "Pemasukan": 0, "Pengeluaran": 600000.0, "Saldo": 13538928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Bayar Bengkel Ganti Oli Mobil", "Pemasukan": 0, "Pengeluaran": 895500.0, "Saldo": 12643428.0}, {"Tanggal": "2025-01-18", "Deskripsi": "Total Pengeluaran Tidak Tercatat", "Pemasukan": 0, "Pengeluaran": 813000.0, "Saldo": 11830428.0}, {"Tanggal": "2026-02-07", "Deskripsi": "Bayar Servis AC", "Pemasukan": 0, "Pengeluaran": 750000.0, "Saldo": 11080428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 10880428.0}, {"Tanggal": "2026-02-06", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 10380428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 159000.0, "Saldo": 10221428.0}, {"Tanggal": "2026-02-14", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9721428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Mama Ambil Uang Arisan", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 9521428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Ambil Uang di Sukoharjo", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9021428.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Belanja Freshmart", "Pemasukan": 0, "Pengeluaran": 137500.0, "Saldo": 8883928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 8683928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Bayar PLN + PDAM", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 7183928.0}, {"Tanggal": "2026-02-22", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 6683928.0}, {"Tanggal": "2026-03-01", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 6483928.0}, {"Tanggal": "2026-03-02", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 6183928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Ambil Uang Lebaran", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 5183928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 4883928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash Lebaran", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 4383928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Transfer Brimo Lebaran", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 2383928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Freshmart Sebelum Lebaran", "Pemasukan": 0, "Pengeluaran": 292900.0, "Saldo": 2091028.0}, {"Tanggal": "2026-03-24", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 1891028.0}, {"Tanggal": "2026-04-11", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 1510800.0, "Saldo": 380228.0}];
-        const dataPakde = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 33998317.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Tante Yuni Transfer", "Pemasukan": 25000000.0, "Pengeluaran": 0, "Saldo": 58998317.0}, {"Tanggal": "2025-05-20", "Deskripsi": "Mas Bagas Pinjam", "Pemasukan": 0, "Pengeluaran": 30000000.0, "Saldo": 28998317.0}, {"Tanggal": "12 Juni 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 27998317.0}, {"Tanggal": "2 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27798317.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27598317.0}, {"Tanggal": "15 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 27098317.0}, {"Tanggal": "1 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26598317.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26098317.0}, {"Tanggal": "2025-09-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25798317.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25498317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 25398317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 7016.0, "Saldo": 25391301.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 25191301.0}, {"Tanggal": "2025-10-12", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24991301.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24791301.0}, {"Tanggal": "2025-11-10", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 150000.0, "Saldo": 24641301.0}, {"Tanggal": "2025-11-13", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 22141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 13000.0, "Saldo": 22128301.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 22119301.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21919301.0}, {"Tanggal": "2026-01-23", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21719301.0}, {"Tanggal": "2026-02-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21519301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 4000.0, "Saldo": 21515301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 21506301.0}, {"Tanggal": "2026-03-30", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21092301.0}];
-        const dataPLN = [{"Bulan": "20 Desember 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Januari 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Februari 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Maret 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "2025-04-20", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Mei 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Juni 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Juli 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Agustus 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "2025-09-20", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}, {"Bulan": "20 Oktober 2025", "Nominal": 1159840.0, "Status": "BELUM LUNAS"}];
-        const dataBank = [{"Bulan": "2025-11-21", "Nominal": 2338430.0, "Status": "LUNAS"}, {"Bulan": "2025-12-21", "Nominal": 2338430.0, "Status": "LUNAS"}, {"Bulan": "2026-01-21", "Nominal": 2338430.0, "Status": "LUNAS"}, {"Bulan": "2026-02-21", "Nominal": 2338430.0, "Status": "LUNAS"}, {"Bulan": "2026-03-21", "Nominal": 2338430.0, "Status": "LUNAS"}, {"Bulan": "2026-04-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-05-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-06-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-07-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-08-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-09-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-10-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-11-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2026-12-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2027-01-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2027-02-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2027-03-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2027-04-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2027-05-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}, {"Bulan": "2027-06-21", "Nominal": 2338430.0, "Status": "BELUM LUNAS"}];
+        // Set Default Date to Today
+        document.getElementById('mama-date').valueAsDate = new Date();
+        document.getElementById('pakde-date').valueAsDate = new Date();
+
+        let dataMama = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Uang Belanja", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 61789281.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Ambil Uang Sangu Cash", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 61739281.0}, {"Tanggal": "9 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 61439281.0}, {"Tanggal": "16 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60939281.0}, {"Tanggal": "1 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 60639281.0}, {"Tanggal": "5 Maret 2025", "Deskripsi": "Cash 300, Brimo TF 200", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60139281.0}, {"Tanggal": "10 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59639281.0}, {"Tanggal": "11 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59139281.0}, {"Tanggal": "19 Maret 2025", "Deskripsi": "Ambil Uang Pulang Sukoharjo", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 57639281.0}, {"Tanggal": "21 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 54139281.0}, {"Tanggal": "26 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 53139281.0}, {"Tanggal": "2025-04-25", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3501839.0, "Saldo": 49637442.0}, {"Tanggal": "15 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 10001656.0, "Saldo": 39635786.0}, {"Tanggal": "30 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 39335786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 36835786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3196.0, "Saldo": 36832590.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 36332590.0}, {"Tanggal": "14 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 35832590.0}, {"Tanggal": "19 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 35532590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 33032590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3656.0, "Saldo": 33028934.0}, {"Tanggal": "04 Agustus 2025", "Deskripsi": "Servis Mobil", "Pemasukan": 0, "Pengeluaran": 2150000.0, "Saldo": 30878934.0}, {"Tanggal": "09 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 700000.0, "Saldo": 30178934.0}, {"Tanggal": "14 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 29878934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 29378934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3956.0, "Saldo": 29374978.0}, {"Tanggal": "22 Agustus 2025", "Deskripsi": "Bayar Angsuran + Listrik+PDAM", "Pemasukan": 0, "Pengeluaran": 3000000.0, "Saldo": 26374978.0}, {"Tanggal": "27 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 25874978.0}, {"Tanggal": "28 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 24874978.0}, {"Tanggal": "30 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24374978.0}, {"Tanggal": "2025-09-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23874978.0}, {"Tanggal": "2025-09-02", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23374978.0}, {"Tanggal": "2025-09-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 20874978.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 20674978.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Uang Pinjam Mbak Santi", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 19674978.0}, {"Tanggal": "2025-10-04", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 19374978.0}, {"Tanggal": "2025-10-05", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 18974978.0}, {"Tanggal": "2025-10-08", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 18474978.0}, {"Tanggal": "2025-10-13", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 18174978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 17774978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 214000.0, "Saldo": 17560978.0}, {"Tanggal": "2025-10-17", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 16560978.0}, {"Tanggal": "2025-10-16", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 215200.0, "Saldo": 16345778.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 16295778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 13795778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 13595778.0}, {"Tanggal": "2025-11-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 518100.0, "Saldo": 13077678.0}, {"Tanggal": "2025-11-11", "Deskripsi": "Bayar Denda PLN", "Pemasukan": 0, "Pengeluaran": 6801750.0, "Saldo": 6275928.0}, {"Tanggal": "2025-11-05", "Deskripsi": "Bobby Narik ATM", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 6225928.0}, {"Tanggal": "2025-11-23", "Deskripsi": "Transfer Bayar Bank Jateng", "Pemasukan": 0, "Pengeluaran": 2400000.0, "Saldo": 3825928.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Pembayaran tagihan PLN, PDAM, dan Bank Jateng via pindah rekening.", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 325928.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Handoko Bayar Kontrakan", "Pemasukan": 15000000.0, "Pengeluaran": 0, "Saldo": 15325928.0}, {"Tanggal": "2025-01-02", "Deskripsi": "Servis LCD Laptop", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 15025928.0}, {"Tanggal": "2025-01-24", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 14525928.0}, {"Tanggal": "2025-01-16", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 250000.0, "Saldo": 14275928.0}, {"Tanggal": "2025-01-26", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 137000.0, "Saldo": 14138928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Ambil Uang Sangu Piknik", "Pemasukan": 0, "Pengeluaran": 600000.0, "Saldo": 13538928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Bayar Bengkel Ganti Oli Mobil", "Pemasukan": 0, "Pengeluaran": 895500.0, "Saldo": 12643428.0}, {"Tanggal": "2025-01-18", "Deskripsi": "Total Pengeluaran Tidak Tercatat", "Pemasukan": 0, "Pengeluaran": 813000.0, "Saldo": 11830428.0}, {"Tanggal": "2026-02-07", "Deskripsi": "Bayar Servis AC", "Pemasukan": 0, "Pengeluaran": 750000.0, "Saldo": 11080428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 10880428.0}, {"Tanggal": "2026-02-06", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 10380428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 159000.0, "Saldo": 10221428.0}, {"Tanggal": "2026-02-14", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9721428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Mama Ambil Uang Arisan", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 9521428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Ambil Uang di Sukoharjo", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9021428.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Belanja Freshmart", "Pemasukan": 0, "Pengeluaran": 137500.0, "Saldo": 8883928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 8683928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Bayar PLN + PDAM", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 7183928.0}, {"Tanggal": "2026-02-22", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 6683928.0}, {"Tanggal": "2026-03-01", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 6483928.0}, {"Tanggal": "2026-03-02", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 6183928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Ambil Uang Lebaran", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 5183928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 4883928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash Lebaran", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 4383928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Transfer Brimo Lebaran", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 2383928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Freshmart Sebelum Lebaran", "Pemasukan": 0, "Pengeluaran": 292900.0, "Saldo": 2091028.0}, {"Tanggal": "2026-03-24", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 1891028.0}, {"Tanggal": "2026-04-11", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 1510800.0, "Saldo": 380228.0}];
+        let dataPakde = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 33998317.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Tante Yuni Transfer", "Pemasukan": 25000000.0, "Pengeluaran": 0, "Saldo": 58998317.0}, {"Tanggal": "2025-05-20", "Deskripsi": "Mas Bagas Pinjam", "Pemasukan": 0, "Pengeluaran": 30000000.0, "Saldo": 28998317.0}, {"Tanggal": "12 Juni 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 27998317.0}, {"Tanggal": "2 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27798317.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27598317.0}, {"Tanggal": "15 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 27098317.0}, {"Tanggal": "1 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26598317.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26098317.0}, {"Tanggal": "2025-09-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25798317.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25498317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 25398317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 7016.0, "Saldo": 25391301.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 25191301.0}, {"Tanggal": "2025-10-12", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24991301.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24791301.0}, {"Tanggal": "2025-11-10", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 150000.0, "Saldo": 24641301.0}, {"Tanggal": "2025-11-13", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 22141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 13000.0, "Saldo": 22128301.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 22119301.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21919301.0}, {"Tanggal": "2026-01-23", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21719301.0}, {"Tanggal": "2026-02-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21519301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 4000.0, "Saldo": 21515301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 21506301.0}, {"Tanggal": "2026-03-30", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21092301.0}];
+
+        // Balik array agar entri terbaru ada di index 0
+        dataMama = dataMama.reverse();
+        dataPakde = dataPakde.reverse();
 
         const formatRp = (num) => {
-            if (!num || num === 0) return '-';
+            if (num === null || isNaN(num)) return '-';
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+        };
+
+        const updateSummary = () => {
+            const saldoM = dataMama.length > 0 ? dataMama[0].Saldo : 0;
+            const saldoP = dataPakde.length > 0 ? dataPakde[0].Saldo : 0;
+            document.getElementById('saldo-mama-text').innerText = formatRp(saldoM);
+            document.getElementById('saldo-pakde-text').innerText = formatRp(saldoP);
         };
 
         const renderLedger = (data, elementId) => {
             const tbody = document.getElementById(elementId);
             let html = '';
             data.forEach(row => {
-                if(!row.Deskripsi && row.Saldo === 0) return; // Skip dummy totals row
+                if(!row.Deskripsi && row.Saldo === 0) return; // Skip baris dummy
                 html += `
                     <tr class="hover:bg-slate-50/50 transition-colors">
                         <td class="px-6 py-4 text-slate-600">${row.Tanggal}</td>
@@ -171,39 +157,54 @@
             tbody.innerHTML = html;
         };
 
-        const renderDebt = (data, elementId) => {
-            const tbody = document.getElementById(elementId);
-            let html = '';
-            data.forEach(row => {
-                if(row.Bulan.toLowerCase().includes('total') || row.Bulan.toLowerCase().includes('sisa')) return;
-                const isLunas = row.Status === 'LUNAS';
-                const badgeClass = isLunas 
-                    ? 'bg-emerald-100 text-emerald-700 border-emerald-200' 
-                    : 'bg-rose-100 text-rose-700 border-rose-200';
-                
-                html += `
-                    <tr class="hover:bg-slate-50/50 transition-colors">
-                        <td class="px-6 py-4 text-slate-800 font-medium">${row.Bulan}</td>
-                        <td class="px-6 py-4 text-right font-medium text-slate-600">${formatRp(row.Nominal)}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold border ${badgeClass}">
-                                ${row.Status}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
+        // Fungsi Tambah Transaksi
+        window.addTransaction = function(person) {
+            const dateInput = document.getElementById(`${person}-date`).value;
+            const descInput = document.getElementById(`${person}-desc`).value;
+            const typeInput = document.getElementById(`${person}-type`).value;
+            const amountInput = parseFloat(document.getElementById(`${person}-amount`).value);
+
+            if (!dateInput || !descInput || isNaN(amountInput) || amountInput <= 0) {
+                alert("Mohon lengkapi semua data dengan benar!");
+                return;
+            }
+
+            const dataArr = person === 'mama' ? dataMama : dataPakde;
+            const currentSaldo = dataArr.length > 0 ? dataArr[0].Saldo : 0; // Karena array sudah di-reverse (paling baru di atas)
+
+            let pmasuk = typeInput === 'pemasukan' ? amountInput : 0;
+            let pkeluar = typeInput === 'pengeluaran' ? amountInput : 0;
+            let newSaldo = currentSaldo + pmasuk - pkeluar;
+
+            // Format tanggal jadi lebih mudah dibaca (opsional, biarkan YYYY-MM-DD juga tidak apa)
+            
+            const newRecord = {
+                Tanggal: dateInput,
+                Deskripsi: descInput,
+                Pemasukan: pmasuk,
+                Pengeluaran: pkeluar,
+                Saldo: newSaldo
+            };
+
+            // Masukkan data baru ke baris paling atas
+            dataArr.unshift(newRecord);
+
+            // Re-render ulang tabel dan summary
+            renderLedger(dataArr, `body-${person}`);
+            updateSummary();
+
+            // Kosongkan form text dan number
+            document.getElementById(`${person}-desc`).value = '';
+            document.getElementById(`${person}-amount`).value = '';
         };
 
-        // Render Data ke Tabel
-        renderLedger(dataMama.reverse(), 'body-mama'); // Reverse agar terbaru di atas
-        renderLedger(dataPakde.reverse(), 'body-pakde');
-        renderDebt(dataBank, 'body-bank');
-        renderDebt(dataPLN, 'body-pln');
+        // Render Awal Saat Halaman Dibuka
+        renderLedger(dataMama, 'body-mama');
+        renderLedger(dataPakde, 'body-pakde');
+        updateSummary();
 
         // Logika Perpindahan Tab
-        function switchTab(evt, tabId) {
+        window.switchTab = function(evt, tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-white', 'text-slate-800', 'shadow', 'shadow-slate-200');
