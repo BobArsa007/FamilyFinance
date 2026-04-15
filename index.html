@@ -337,7 +337,7 @@
                                 </select></div>
                             <div class="col-span-2"><label class="text-xs text-zinc-400 mb-1.5 block">Deskripsi</label>
                                 <input type="text" id="mama-desc-m" placeholder="Contoh: Belanja bulanan" class="w-full rounded-xl border px-3 py-3 text-sm"></div>
-                            <div><label class="text-xs text-zinc-400 mb-1.5 block">Nominal (Rp)</label>
+<div><label class="text-xs text-zinc-400 mb-1.5 block">Nominal (Rp)</label>
                                 <input type="number" id="mama-amount-m" placeholder="500000" class="w-full rounded-xl border px-3 py-3 text-sm"></div>
                             <div class="flex items-end"><button onclick="addTransactionMobile('mama')"
                                     class="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-3 rounded-xl text-sm font-semibold transition-colors">
@@ -425,13 +425,10 @@
 
     <script>
         // =============================================
-        // JSONBIN CONFIG — Ganti dengan BIN ID & API KEY kamu
-        // 1. Daftar di https://jsonbin.io
-        // 2. Buat bin baru dengan JSON: {"dataMama": [], "dataPakde": []}
-        // 3. Isi BIN_ID dan API_KEY di bawah ini
+        // JSONBIN CONFIG
         // =============================================
-        const JSONBIN_BIN_ID = 'GANTI_DENGAN_BIN_ID_KAMU';
-        const JSONBIN_API_KEY = 'GANTI_DENGAN_API_KEY_KAMU';
+        const JSONBIN_BIN_ID = '69dfd38a36566621a8b8e7e5';
+        const JSONBIN_API_KEY = '$2a$10$aOMy.0xdjfpp1ly5ZZWtCuD65YDOf8msitXmJj2FDeS5XT1AQcN1y';
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
         const initialDataMama = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Uang Belanja", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 61789281.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Ambil Uang Sangu Cash", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 61739281.0}, {"Tanggal": "9 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 61439281.0}, {"Tanggal": "16 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60939281.0}, {"Tanggal": "1 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 60639281.0}, {"Tanggal": "5 Maret 2025", "Deskripsi": "Cash 300, Brimo TF 200", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60139281.0}, {"Tanggal": "10 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59639281.0}, {"Tanggal": "11 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59139281.0}, {"Tanggal": "19 Maret 2025", "Deskripsi": "Ambil Uang Pulang Sukoharjo", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 57639281.0}, {"Tanggal": "21 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 54139281.0}, {"Tanggal": "26 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 53139281.0}, {"Tanggal": "2025-04-25", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3501839.0, "Saldo": 49637442.0}, {"Tanggal": "15 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 10001656.0, "Saldo": 39635786.0}, {"Tanggal": "30 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 39335786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 36835786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3196.0, "Saldo": 36832590.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 36332590.0}, {"Tanggal": "14 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 35832590.0}, {"Tanggal": "19 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 35532590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 33032590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3656.0, "Saldo": 33028934.0}, {"Tanggal": "04 Agustus 2025", "Deskripsi": "Servis Mobil", "Pemasukan": 0, "Pengeluaran": 2150000.0, "Saldo": 30878934.0}, {"Tanggal": "09 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 700000.0, "Saldo": 30178934.0}, {"Tanggal": "14 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 29878934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 29378934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3956.0, "Saldo": 29374978.0}, {"Tanggal": "22 Agustus 2025", "Deskripsi": "Bayar Angsuran + Listrik+PDAM", "Pemasukan": 0, "Pengeluaran": 3000000.0, "Saldo": 26374978.0}, {"Tanggal": "27 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 25874978.0}, {"Tanggal": "28 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 24874978.0}, {"Tanggal": "30 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24374978.0}, {"Tanggal": "2025-09-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23874978.0}, {"Tanggal": "2025-09-02", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23374978.0}, {"Tanggal": "2025-09-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 20874978.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 20674978.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Uang Pinjam Mbak Santi", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 19674978.0}, {"Tanggal": "2025-10-04", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 19374978.0}, {"Tanggal": "2025-10-05", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 18974978.0}, {"Tanggal": "2025-10-08", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 18474978.0}, {"Tanggal": "2025-10-13", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 18174978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 17774978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 214000.0, "Saldo": 17560978.0}, {"Tanggal": "2025-10-17", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 16560978.0}, {"Tanggal": "2025-10-16", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 215200.0, "Saldo": 16345778.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 16295778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 13795778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 13595778.0}, {"Tanggal": "2025-11-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 518100.0, "Saldo": 13077678.0}, {"Tanggal": "2025-11-11", "Deskripsi": "Bayar Denda PLN", "Pemasukan": 0, "Pengeluaran": 6801750.0, "Saldo": 6275928.0}, {"Tanggal": "2025-11-05", "Deskripsi": "Bobby Narik ATM", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 6225928.0}, {"Tanggal": "2025-11-23", "Deskripsi": "Transfer Bayar Bank Jateng", "Pemasukan": 0, "Pengeluaran": 2400000.0, "Saldo": 3825928.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Pembayaran tagihan PLN, PDAM, dan Bank Jateng via pindah rekening.", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 325928.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Handoko Bayar Kontrakan", "Pemasukan": 15000000.0, "Pengeluaran": 0, "Saldo": 15325928.0}, {"Tanggal": "2025-01-02", "Deskripsi": "Servis LCD Laptop", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 15025928.0}, {"Tanggal": "2025-01-24", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 14525928.0}, {"Tanggal": "2025-01-16", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 250000.0, "Saldo": 14275928.0}, {"Tanggal": "2025-01-26", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 137000.0, "Saldo": 14138928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Ambil Uang Sangu Piknik", "Pemasukan": 0, "Pengeluaran": 600000.0, "Saldo": 13538928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Bayar Bengkel Ganti Oli Mobil", "Pemasukan": 0, "Pengeluaran": 895500.0, "Saldo": 12643428.0}, {"Tanggal": "2025-01-18", "Deskripsi": "Total Pengeluaran Tidak Tercatat", "Pemasukan": 0, "Pengeluaran": 813000.0, "Saldo": 11830428.0}, {"Tanggal": "2026-02-07", "Deskripsi": "Bayar Servis AC", "Pemasukan": 0, "Pengeluaran": 750000.0, "Saldo": 11080428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 10880428.0}, {"Tanggal": "2026-02-06", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 10380428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 159000.0, "Saldo": 10221428.0}, {"Tanggal": "2026-02-14", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9721428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Mama Ambil Uang Arisan", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 9521428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Ambil Uang di Sukoharjo", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9021428.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Belanja Freshmart", "Pemasukan": 0, "Pengeluaran": 137500.0, "Saldo": 8883928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 8683928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Bayar PLN + PDAM", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 7183928.0}, {"Tanggal": "2026-02-22", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 6683928.0}, {"Tanggal": "2026-03-01", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 6483928.0}, {"Tanggal": "2026-03-02", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 6183928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Ambil Uang Lebaran", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 5183928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 4883928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash Lebaran", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 4383928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Transfer Brimo Lebaran", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 2383928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Freshmart Sebelum Lebaran", "Pemasukan": 0, "Pengeluaran": 292900.0, "Saldo": 2091028.0}, {"Tanggal": "2026-03-24", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 1891028.0}, {"Tanggal": "2026-04-11", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 1510800.0, "Saldo": 380228.0}];
@@ -443,12 +440,6 @@
 
         // ============ JSONBIN HELPERS ============
         async function loadFromCloud() {
-            // If no bin ID configured, fall back to initial data
-            if (JSONBIN_BIN_ID === 'GANTI_DENGAN_BIN_ID_KAMU') {
-                dataMama = [...initialDataMama].reverse();
-                dataPakde = [...initialDataPakde].reverse();
-                return;
-            }
             try {
                 const res = await fetch(`${JSONBIN_URL}/latest`, {
                     headers: { 'X-Master-Key': JSONBIN_API_KEY }
@@ -456,7 +447,6 @@
                 if (!res.ok) throw new Error('Fetch failed');
                 const json = await res.json();
                 const record = json.record;
-                // If bin is empty/new, seed with initial data
                 if (!record.dataMama || record.dataMama.length === 0) {
                     dataMama = [...initialDataMama].reverse();
                     dataPakde = [...initialDataPakde].reverse();
@@ -473,7 +463,6 @@
         }
 
         async function saveToCloud() {
-            if (JSONBIN_BIN_ID === 'GANTI_DENGAN_BIN_ID_KAMU') return;
             try {
                 await fetch(JSONBIN_URL, {
                     method: 'PUT',
@@ -538,7 +527,6 @@
             const pC = document.getElementById('wallet-pakde');
             const panel = document.getElementById('ledger-panel');
 
-            // Animate flap open
             mC.classList.remove('opened', 'active-mama');
             pC.classList.remove('opened', 'active-pakde');
 
@@ -552,7 +540,6 @@
                 pC.classList.remove('opened');
             }, 3000);
 
-            // If same wallet already open, toggle closed
             if (currentWallet === person && panel.classList.contains('open')) {
                 panel.classList.remove('open');
                 currentWallet = null;
@@ -562,14 +549,9 @@
             }
 
             currentWallet = person;
-
-            // Switch ledger tab
             switchLedgerTab(person);
-
-            // Open panel
             panel.classList.add('open');
 
-            // Scroll to panel after transition
             setTimeout(() => {
                 panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 200);
@@ -658,7 +640,6 @@
             renderLedger(dataPakde, 'body-pakde');
             updateSummary();
 
-            // Set today's date on all date inputs
             const today = new Date();
             ['mama-date','mama-date-m','pakde-date','pakde-date-m'].forEach(id => {
                 const el = document.getElementById(id);
