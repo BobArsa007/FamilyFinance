@@ -9,38 +9,48 @@
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #f8fafc; 
+            background-color: #050505; 
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        input, select { outline: none; }
+        
+        input, select { 
+            outline: none; 
+            background-color: #111113;
+            border-color: #27272a;
+        }
         input:focus, select:focus { 
             border-color: #3b82f6; 
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
+        
         .card-hover {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgb(15 23 42 / 0.1), 
-                        0 8px 10px -6px rgb(15 23 42 / 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+        
+        table thead {
+            background-color: #111113;
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased p-4 md:p-8">
+<body class="text-slate-200 antialiased p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
         
         <!-- Header -->
-        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 pb-6">
+        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
             <div>
-                <h1 class="text-3xl font-semibold text-slate-900 tracking-tight">Manajemen Finansial</h1>
-                <p class="text-slate-500 mt-1 text-lg">Ringkasan arus kas keluarga • Mama & Pakde</p>
+                <h1 class="text-4xl font-semibold text-white tracking-tighter">Manajemen Finansial</h1>
+                <p class="text-zinc-400 mt-1 text-lg">Ringkasan arus kas keluarga • Mama & Pakde</p>
             </div>
+            
             <button onclick="resetData()" 
-                    class="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 border border-red-200 rounded-2xl transition-colors">
+                    class="flex items-center gap-2 px-6 py-3 text-sm font-medium bg-zinc-900 hover:bg-red-950 border border-zinc-700 hover:border-red-800 text-red-400 hover:text-red-300 rounded-3xl transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0a8 8 0 01-7.714-6.19" />
                 </svg>
@@ -48,107 +58,114 @@
             </button>
         </header>
 
-        <!-- Summary Cards - 3 kolom di desktop, lebih refined -->
+        <!-- Summary Cards - Black Theme -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             
             <!-- Saldo Mama -->
-            <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100 card-hover relative overflow-hidden">
+            <div class="bg-zinc-900 rounded-3xl p-7 border border-zinc-800 card-hover relative overflow-hidden">
                 <div class="absolute top-6 right-6 opacity-10">
-                    <svg class="w-20 h-20 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-20 h-20 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
                         <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
                     </svg>
                 </div>
                 <div class="flex items-center gap-2 mb-1">
                     <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-[0.5px]">Sisa Saldo Mama</h3>
+                    <h3 class="text-sm font-semibold text-zinc-400 uppercase tracking-widest">Saldo Mama</h3>
                 </div>
-                <p class="text-4xl font-semibold text-blue-600 mt-2 tracking-tighter" id="saldo-mama-text">Rp 0</p>
+                <p class="text-4xl font-semibold text-blue-400 mt-2 tracking-tighter" id="saldo-mama-text">Rp 0</p>
             </div>
 
             <!-- Saldo Pakde -->
-            <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100 card-hover relative overflow-hidden">
+            <div class="bg-zinc-900 rounded-3xl p-7 border border-zinc-800 card-hover relative overflow-hidden">
                 <div class="absolute top-6 right-6 opacity-10">
-                    <svg class="w-20 h-20 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-20 h-20 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
                         <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
                     </svg>
                 </div>
                 <div class="flex items-center gap-2 mb-1">
                     <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-[0.5px]">Sisa Saldo Pakde</h3>
+                    <h3 class="text-sm font-semibold text-zinc-400 uppercase tracking-widest">Saldo Pakde</h3>
                 </div>
-                <p class="text-4xl font-semibold text-emerald-600 mt-2 tracking-tighter" id="saldo-pakde-text">Rp 0</p>
+                <p class="text-4xl font-semibold text-emerald-400 mt-2 tracking-tighter" id="saldo-pakde-text">Rp 0</p>
             </div>
 
-            <!-- TOTAL KAS KELUARGA (baru) -->
-            <div class="bg-white rounded-3xl p-7 shadow-sm border border-slate-100 card-hover relative overflow-hidden ring-1 ring-violet-200">
+            <!-- TOTAL KAS KELUARGA -->
+            <div class="bg-zinc-900 rounded-3xl p-7 border border-zinc-800 card-hover relative overflow-hidden ring-1 ring-violet-500/30">
                 <div class="absolute top-6 right-6 opacity-10">
-                    <svg class="w-20 h-20 text-violet-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <svg class="w-20 h-20 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 8v1m0-8V7m0 8v1m0-9v-1m0 10v1" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M3 18h18M3 6h18" />
                     </svg>
                 </div>
                 <div class="flex items-center gap-2 mb-1">
-                    <div class="w-3 h-3 rounded-full bg-violet-500"></div>
-                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-[0.5px]">Total Kas Keluarga</h3>
+                    <div class="w-3 h-3 rounded-full bg-violet-400"></div>
+                    <h3 class="text-sm font-semibold text-zinc-400 uppercase tracking-widest">Total Kas Keluarga</h3>
                 </div>
-                <p class="text-4xl font-semibold text-violet-600 mt-2 tracking-tighter" id="saldo-total-text">Rp 0</p>
-                <p class="text-xs text-slate-400 mt-3 font-medium">Mama + Pakde</p>
+                <p class="text-4xl font-semibold text-violet-400 mt-2 tracking-tighter" id="saldo-total-text">Rp 0</p>
+                <p class="text-xs text-zinc-500 mt-4">Mama + Pakde</p>
             </div>
         </div>
 
         <!-- Tabs -->
-        <div class="flex space-x-1 bg-slate-100 p-1 rounded-3xl mb-8 overflow-x-auto scrollbar-hide shadow-inner">
+        <div class="flex space-x-1 bg-zinc-900 p-1.5 rounded-3xl mb-8 border border-zinc-800">
             <button onclick="switchTab(event, 'tab-mama')" 
-                    class="tab-btn active flex-1 py-3.5 px-6 rounded-3xl text-sm font-semibold transition-all bg-white text-slate-800 shadow-sm">
+                    class="tab-btn active flex-1 py-4 px-8 rounded-3xl text-base font-semibold transition-all bg-black text-white shadow-inner">
                 📒 Buku Kas Mama
             </button>
             <button onclick="switchTab(event, 'tab-pakde')" 
-                    class="tab-btn flex-1 py-3.5 px-6 rounded-3xl text-sm font-semibold transition-all text-slate-500 hover:text-slate-700">
+                    class="tab-btn flex-1 py-4 px-8 rounded-3xl text-base font-semibold transition-all text-zinc-400 hover:text-zinc-200">
                 📒 Buku Kas Pakde
             </button>
         </div>
 
         <!-- Tab Mama -->
         <div id="tab-mama" class="tab-content active">
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 mb-6">
-                <h3 class="text-base font-semibold text-slate-800 mb-5 flex items-center gap-2">
-                    <span class="text-blue-600">➕</span> Tambah Transaksi Mama
+            <div class="bg-zinc-900 rounded-3xl border border-zinc-800 p-8 mb-8">
+                <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-3">
+                    <span class="text-blue-400 text-xl">➕</span> 
+                    Tambah Transaksi Mama
                 </h3>
-                <div class="flex flex-col md:flex-row gap-4 items-end">
-                    <div class="flex-1"><label class="text-xs text-slate-500 mb-1 block">Tanggal</label><input type="date" id="mama-date" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50"></div>
-                    <div class="flex-[2]"><label class="text-xs text-slate-500 mb-1 block">Deskripsi</label><input type="text" id="mama-desc" placeholder="Contoh: Belanja bulanan" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50"></div>
-                    <div class="flex-1"><label class="text-xs text-slate-500 mb-1 block">Tipe</label>
-                        <select id="mama-type" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50">
+                <div class="flex flex-col md:flex-row gap-5 items-end">
+                    <div class="flex-1"><label class="text-xs text-zinc-400 mb-2 block">Tanggal</label>
+                        <input type="date" id="mama-date" class="w-full rounded-2xl border px-5 py-4 text-sm">
+                    </div>
+                    <div class="flex-[2]"><label class="text-xs text-zinc-400 mb-2 block">Deskripsi</label>
+                        <input type="text" id="mama-desc" placeholder="Contoh: Belanja bulanan" class="w-full rounded-2xl border px-5 py-4 text-sm">
+                    </div>
+                    <div class="flex-1"><label class="text-xs text-zinc-400 mb-2 block">Tipe</label>
+                        <select id="mama-type" class="w-full rounded-2xl border px-5 py-4 text-sm">
                             <option value="pengeluaran">Pengeluaran</option>
                             <option value="pemasukan">Pemasukan</option>
                         </select>
                     </div>
-                    <div class="flex-1"><label class="text-xs text-slate-500 mb-1 block">Nominal (Rp)</label><input type="number" id="mama-amount" placeholder="500000" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50"></div>
+                    <div class="flex-1"><label class="text-xs text-zinc-400 mb-2 block">Nominal (Rp)</label>
+                        <input type="number" id="mama-amount" placeholder="500000" class="w-full rounded-2xl border px-5 py-4 text-sm">
+                    </div>
                     <div class="md:w-auto w-full">
                         <button onclick="addTransaction('mama')" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-2xl text-sm font-semibold shadow-sm transition-colors">
-                            Simpan Transaksi
+                                class="w-full bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-2xl text-base font-semibold transition-colors">
+                            Simpan
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- Tabel Mama -->
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden">
                 <div class="overflow-x-auto max-h-[620px]">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50 text-slate-500 border-b border-slate-100 sticky top-0">
+                        <thead class="border-b border-zinc-800">
                             <tr>
-                                <th class="px-8 py-5 font-medium">Tanggal</th>
-                                <th class="px-8 py-5 font-medium">Deskripsi</th>
-                                <th class="px-8 py-5 font-medium text-right">Pemasukan</th>
-                                <th class="px-8 py-5 font-medium text-right">Pengeluaran</th>
-                                <th class="px-8 py-5 font-medium text-right">Saldo Akhir</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400">Tanggal</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400">Deskripsi</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400 text-right">Pemasukan</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400 text-right">Pengeluaran</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400 text-right">Saldo Akhir</th>
                             </tr>
                         </thead>
-                        <tbody id="body-mama" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="body-mama" class="divide-y divide-zinc-800"></tbody>
                     </table>
                 </div>
             </div>
@@ -156,43 +173,50 @@
 
         <!-- Tab Pakde -->
         <div id="tab-pakde" class="tab-content">
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 mb-6">
-                <h3 class="text-base font-semibold text-slate-800 mb-5 flex items-center gap-2">
-                    <span class="text-emerald-600">➕</span> Tambah Transaksi Pakde
+            <div class="bg-zinc-900 rounded-3xl border border-zinc-800 p-8 mb-8">
+                <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-3">
+                    <span class="text-emerald-400 text-xl">➕</span> 
+                    Tambah Transaksi Pakde
                 </h3>
-                <div class="flex flex-col md:flex-row gap-4 items-end">
-                    <div class="flex-1"><label class="text-xs text-slate-500 mb-1 block">Tanggal</label><input type="date" id="pakde-date" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50"></div>
-                    <div class="flex-[2]"><label class="text-xs text-slate-500 mb-1 block">Deskripsi</label><input type="text" id="pakde-desc" placeholder="Contoh: Uang bensin" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50"></div>
-                    <div class="flex-1"><label class="text-xs text-slate-500 mb-1 block">Tipe</label>
-                        <select id="pakde-type" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50">
+                <div class="flex flex-col md:flex-row gap-5 items-end">
+                    <div class="flex-1"><label class="text-xs text-zinc-400 mb-2 block">Tanggal</label>
+                        <input type="date" id="pakde-date" class="w-full rounded-2xl border px-5 py-4 text-sm">
+                    </div>
+                    <div class="flex-[2]"><label class="text-xs text-zinc-400 mb-2 block">Deskripsi</label>
+                        <input type="text" id="pakde-desc" placeholder="Contoh: Uang bensin" class="w-full rounded-2xl border px-5 py-4 text-sm">
+                    </div>
+                    <div class="flex-1"><label class="text-xs text-zinc-400 mb-2 block">Tipe</label>
+                        <select id="pakde-type" class="w-full rounded-2xl border px-5 py-4 text-sm">
                             <option value="pengeluaran">Pengeluaran</option>
                             <option value="pemasukan">Pemasukan</option>
                         </select>
                     </div>
-                    <div class="flex-1"><label class="text-xs text-slate-500 mb-1 block">Nominal (Rp)</label><input type="number" id="pakde-amount" placeholder="500000" class="w-full rounded-2xl border-slate-200 shadow-sm text-sm px-4 py-3 border bg-slate-50"></div>
+                    <div class="flex-1"><label class="text-xs text-zinc-400 mb-2 block">Nominal (Rp)</label>
+                        <input type="number" id="pakde-amount" placeholder="500000" class="w-full rounded-2xl border px-5 py-4 text-sm">
+                    </div>
                     <div class="md:w-auto w-full">
                         <button onclick="addTransaction('pakde')" 
-                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3.5 rounded-2xl text-sm font-semibold shadow-sm transition-colors">
-                            Simpan Transaksi
+                                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white px-10 py-4 rounded-2xl text-base font-semibold transition-colors">
+                            Simpan
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- Tabel Pakde -->
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden">
                 <div class="overflow-x-auto max-h-[620px]">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50 text-slate-500 border-b border-slate-100 sticky top-0">
+                        <thead class="border-b border-zinc-800">
                             <tr>
-                                <th class="px-8 py-5 font-medium">Tanggal</th>
-                                <th class="px-8 py-5 font-medium">Deskripsi</th>
-                                <th class="px-8 py-5 font-medium text-right">Pemasukan</th>
-                                <th class="px-8 py-5 font-medium text-right">Pengeluaran</th>
-                                <th class="px-8 py-5 font-medium text-right">Saldo Akhir</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400">Tanggal</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400">Deskripsi</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400 text-right">Pemasukan</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400 text-right">Pengeluaran</th>
+                                <th class="px-8 py-6 font-medium text-zinc-400 text-right">Saldo Akhir</th>
                             </tr>
                         </thead>
-                        <tbody id="body-pakde" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="body-pakde" class="divide-y divide-zinc-800"></tbody>
                     </table>
                 </div>
             </div>
@@ -200,12 +224,11 @@
     </div>
 
     <script>
-        // ================== DATA AWAL (copy-paste dari kode lama kamu) ==================
+        // ================== DATA AWAL ==================
         const initialDataMama = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Uang Belanja", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 61789281.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Ambil Uang Sangu Cash", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 61739281.0}, {"Tanggal": "9 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 61439281.0}, {"Tanggal": "16 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60939281.0}, {"Tanggal": "1 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 60639281.0}, {"Tanggal": "5 Maret 2025", "Deskripsi": "Cash 300, Brimo TF 200", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60139281.0}, {"Tanggal": "10 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59639281.0}, {"Tanggal": "11 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59139281.0}, {"Tanggal": "19 Maret 2025", "Deskripsi": "Ambil Uang Pulang Sukoharjo", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 57639281.0}, {"Tanggal": "21 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 54139281.0}, {"Tanggal": "26 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 53139281.0}, {"Tanggal": "2025-04-25", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3501839.0, "Saldo": 49637442.0}, {"Tanggal": "15 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 10001656.0, "Saldo": 39635786.0}, {"Tanggal": "30 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 39335786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 36835786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3196.0, "Saldo": 36832590.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 36332590.0}, {"Tanggal": "14 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 35832590.0}, {"Tanggal": "19 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 35532590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 33032590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3656.0, "Saldo": 33028934.0}, {"Tanggal": "04 Agustus 2025", "Deskripsi": "Servis Mobil", "Pemasukan": 0, "Pengeluaran": 2150000.0, "Saldo": 30878934.0}, {"Tanggal": "09 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 700000.0, "Saldo": 30178934.0}, {"Tanggal": "14 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 29878934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 29378934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3956.0, "Saldo": 29374978.0}, {"Tanggal": "22 Agustus 2025", "Deskripsi": "Bayar Angsuran + Listrik+PDAM", "Pemasukan": 0, "Pengeluaran": 3000000.0, "Saldo": 26374978.0}, {"Tanggal": "27 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 25874978.0}, {"Tanggal": "28 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 24874978.0}, {"Tanggal": "30 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24374978.0}, {"Tanggal": "2025-09-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23874978.0}, {"Tanggal": "2025-09-02", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23374978.0}, {"Tanggal": "2025-09-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 20874978.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 20674978.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Uang Pinjam Mbak Santi", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 19674978.0}, {"Tanggal": "2025-10-04", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 19374978.0}, {"Tanggal": "2025-10-05", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 18974978.0}, {"Tanggal": "2025-10-08", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 18474978.0}, {"Tanggal": "2025-10-13", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 18174978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 17774978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 214000.0, "Saldo": 17560978.0}, {"Tanggal": "2025-10-17", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 16560978.0}, {"Tanggal": "2025-10-16", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 215200.0, "Saldo": 16345778.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 16295778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 13795778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 13595778.0}, {"Tanggal": "2025-11-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 518100.0, "Saldo": 13077678.0}, {"Tanggal": "2025-11-11", "Deskripsi": "Bayar Denda PLN", "Pemasukan": 0, "Pengeluaran": 6801750.0, "Saldo": 6275928.0}, {"Tanggal": "2025-11-05", "Deskripsi": "Bobby Narik ATM", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 6225928.0}, {"Tanggal": "2025-11-23", "Deskripsi": "Transfer Bayar Bank Jateng", "Pemasukan": 0, "Pengeluaran": 2400000.0, "Saldo": 3825928.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Pembayaran tagihan PLN, PDAM, dan Bank Jateng via pindah rekening.", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 325928.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Handoko Bayar Kontrakan", "Pemasukan": 15000000.0, "Pengeluaran": 0, "Saldo": 15325928.0}, {"Tanggal": "2025-01-02", "Deskripsi": "Servis LCD Laptop", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 15025928.0}, {"Tanggal": "2025-01-24", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 14525928.0}, {"Tanggal": "2025-01-16", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 250000.0, "Saldo": 14275928.0}, {"Tanggal": "2025-01-26", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 137000.0, "Saldo": 14138928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Ambil Uang Sangu Piknik", "Pemasukan": 0, "Pengeluaran": 600000.0, "Saldo": 13538928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Bayar Bengkel Ganti Oli Mobil", "Pemasukan": 0, "Pengeluaran": 895500.0, "Saldo": 12643428.0}, {"Tanggal": "2025-01-18", "Deskripsi": "Total Pengeluaran Tidak Tercatat", "Pemasukan": 0, "Pengeluaran": 813000.0, "Saldo": 11830428.0}, {"Tanggal": "2026-02-07", "Deskripsi": "Bayar Servis AC", "Pemasukan": 0, "Pengeluaran": 750000.0, "Saldo": 11080428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 10880428.0}, {"Tanggal": "2026-02-06", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 10380428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 159000.0, "Saldo": 10221428.0}, {"Tanggal": "2026-02-14", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9721428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Mama Ambil Uang Arisan", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 9521428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Ambil Uang di Sukoharjo", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9021428.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Belanja Freshmart", "Pemasukan": 0, "Pengeluaran": 137500.0, "Saldo": 8883928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 8683928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Bayar PLN + PDAM", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 7183928.0}, {"Tanggal": "2026-02-22", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 6683928.0}, {"Tanggal": "2026-03-01", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 6483928.0}, {"Tanggal": "2026-03-02", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 6183928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Ambil Uang Lebaran", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 5183928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 4883928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash Lebaran", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 4383928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Transfer Brimo Lebaran", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 2383928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Freshmart Sebelum Lebaran", "Pemasukan": 0, "Pengeluaran": 292900.0, "Saldo": 2091028.0}, {"Tanggal": "2026-03-24", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 1891028.0}, {"Tanggal": "2026-04-11", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 1510800.0, "Saldo": 380228.0}];
 
         const initialDataPakde = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 33998317.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Tante Yuni Transfer", "Pemasukan": 25000000.0, "Pengeluaran": 0, "Saldo": 58998317.0}, {"Tanggal": "2025-05-20", "Deskripsi": "Mas Bagas Pinjam", "Pemasukan": 0, "Pengeluaran": 30000000.0, "Saldo": 28998317.0}, {"Tanggal": "12 Juni 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 27998317.0}, {"Tanggal": "2 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27798317.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27598317.0}, {"Tanggal": "15 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 27098317.0}, {"Tanggal": "1 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26598317.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26098317.0}, {"Tanggal": "2025-09-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25798317.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25498317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 25398317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 7016.0, "Saldo": 25391301.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 25191301.0}, {"Tanggal": "2025-10-12", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24991301.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24791301.0}, {"Tanggal": "2025-11-10", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 150000.0, "Saldo": 24641301.0}, {"Tanggal": "2025-11-13", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 22141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 13000.0, "Saldo": 22128301.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 22119301.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21919301.0}, {"Tanggal": "2026-01-23", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21719301.0}, {"Tanggal": "2026-02-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21519301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 4000.0, "Saldo": 21515301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 21506301.0}, {"Tanggal": "2026-03-30", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21092301.0}];
 
-        // Load data (dari localStorage atau data awal)
         let dataMama = JSON.parse(localStorage.getItem('dataMama')) || [...initialDataMama].reverse();
         let dataPakde = JSON.parse(localStorage.getItem('dataPakde')) || [...initialDataPakde].reverse();
 
@@ -234,12 +257,12 @@
             data.forEach(row => {
                 if (!row.Deskripsi && row.Saldo === 0) return;
                 html += `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-8 py-5 text-slate-600">${row.Tanggal}</td>
-                        <td class="px-8 py-5 font-medium text-slate-800">${row.Deskripsi}</td>
-                        <td class="px-8 py-5 text-right text-emerald-600 font-medium">${formatRp(row.Pemasukan)}</td>
-                        <td class="px-8 py-5 text-right text-rose-600 font-medium">${formatRp(row.Pengeluaran)}</td>
-                        <td class="px-8 py-5 text-right font-semibold text-slate-900">${formatRp(row.Saldo)}</td>
+                    <tr class="hover:bg-zinc-800 transition-colors">
+                        <td class="px-8 py-6 text-zinc-300">${row.Tanggal}</td>
+                        <td class="px-8 py-6 font-medium text-white">${row.Deskripsi}</td>
+                        <td class="px-8 py-6 text-right text-emerald-400 font-medium">${formatRp(row.Pemasukan)}</td>
+                        <td class="px-8 py-6 text-right text-red-400 font-medium">${formatRp(row.Pengeluaran)}</td>
+                        <td class="px-8 py-6 text-right font-semibold text-white">${formatRp(row.Saldo)}</td>
                     </tr>
                 `;
             });
@@ -274,26 +297,24 @@
 
             dataArr.unshift(newRecord);
 
-            // Simpan permanen di browser
             localStorage.setItem(person === 'mama' ? 'dataMama' : 'dataPakde', JSON.stringify(dataArr));
 
             renderLedger(dataArr, `body-${person}`);
             updateSummary();
 
-            // Reset form
             document.getElementById(`${person}-desc`).value = '';
             document.getElementById(`${person}-amount`).value = '';
         };
 
         window.resetData = function() {
-            if (confirm("⚠️ Yakin reset SEMUA data ke posisi awal?\nSemua transaksi yang kamu tambahkan akan hilang.")) {
+            if (confirm("⚠️ Reset semua data ke posisi awal?\nSemua transaksi baru akan hilang.")) {
                 localStorage.removeItem('dataMama');
                 localStorage.removeItem('dataPakde');
                 location.reload();
             }
         };
 
-        // Inisialisasi halaman
+        // Inisialisasi
         document.getElementById('mama-date').valueAsDate = new Date();
         document.getElementById('pakde-date').valueAsDate = new Date();
 
@@ -304,12 +325,12 @@
         window.switchTab = function(evt, tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
-                btn.classList.add('text-slate-500');
+                btn.classList.remove('bg-black', 'text-white', 'shadow-inner');
+                btn.classList.add('text-zinc-400');
             });
             
             document.getElementById(tabId).classList.add('active');
-            evt.currentTarget.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+            evt.currentTarget.classList.add('bg-black', 'text-white', 'shadow-inner');
         };
     </script>
 </body>
