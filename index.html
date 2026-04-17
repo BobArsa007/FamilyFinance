@@ -11,7 +11,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #050505;
         }
-
         input, select {
             outline: none;
             background-color: #111113;
@@ -21,9 +20,7 @@
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
-
         table thead { background-color: #111113; }
-
         .header-title {
             font-size: clamp(1.5rem, 6vw, 2.75rem);
             line-height: 1.05;
@@ -32,7 +29,6 @@
         .header-subtitle {
             font-size: clamp(0.875rem, 3.5vw, 1.5rem);
         }
-
         .total-kas-badge {
             display: flex;
             flex-direction: column;
@@ -59,13 +55,11 @@
             line-height: 1;
             white-space: nowrap;
         }
-
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .wallet-section { animation: fadeInUp 0.8s ease forwards; }
-
         .wallet-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -84,7 +78,6 @@
             height: auto;
         }
         .wallet-card:hover .wallet-svg { transform: scale(1.08) rotate(3deg); }
-
         .flap {
             transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
             transform-origin: 50% 22%;
@@ -96,7 +89,6 @@
             50% { transform: scale(1.12); }
             100% { transform: scale(1); }
         }
-
         .wallet-saldo {
             font-size: clamp(1.5rem, 7vw, 3.75rem);
             font-weight: 700;
@@ -107,14 +99,11 @@
             font-size: clamp(1rem, 4vw, 1.875rem);
             font-weight: 700;
         }
-
         .tab-btn {
             font-size: clamp(0.7rem, 2.8vw, 1rem);
             padding: clamp(8px, 2vw, 16px) clamp(10px, 3vw, 32px);
         }
-
         table thead { position: sticky; top: 0; z-index: 10; }
-
         /* === LEDGER PANEL SLIDE ANIMATION === */
         #ledger-panel {
             overflow: hidden;
@@ -126,7 +115,6 @@
             max-height: 2000px;
             opacity: 1;
         }
-
         /* Active wallet card glow */
         .wallet-card.active-mama {
             border-color: #60a5fa !important;
@@ -136,7 +124,6 @@
             border-color: #34d399 !important;
             box-shadow: 0 0 0 3px rgba(52,211,153,0.18), 0 35px 60px -15px rgb(0 0 0 / 0.5);
         }
-
         /* Loading overlay */
         #loading-overlay {
             position: fixed; inset: 0; background: #050505;
@@ -152,7 +139,6 @@
             animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         /* Toast notification */
         #toast {
             position: fixed; bottom: 24px; right: 24px;
@@ -163,26 +149,22 @@
             transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         #toast.show { transform: translateY(0); opacity: 1; }
-
         /* === TRANSFER BRIDGE === */
         .transfer-bridge {
             animation: fadeInUp 0.9s ease 0.2s both;
         }
-
         /* Arrow animation */
         @keyframes arrowSlide {
             0%, 100% { transform: translateX(0); opacity: 0.6; }
             50% { transform: translateX(6px); opacity: 1; }
         }
         .arrow-anim { animation: arrowSlide 1.5s ease-in-out infinite; }
-
         /* Loan badge pulse */
         @keyframes loanPulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.3); }
             50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
         }
         .loan-badge-pulse { animation: loanPulse 2.5s ease-in-out infinite; }
-
         /* Modal overlay */
         #transfer-modal {
             position: fixed; inset: 0;
@@ -210,7 +192,6 @@
         #transfer-modal.open #transfer-modal-box {
             transform: translateY(0) scale(1);
         }
-
         /* Loan history panel */
         #loan-history-panel {
             overflow: hidden;
@@ -222,19 +203,47 @@
             max-height: 800px;
             opacity: 1;
         }
+
+        /* === EDIT MODAL === */
+        #edit-modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            z-index: 600;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 16px;
+        }
+        #edit-modal.open {
+            opacity: 1; pointer-events: all;
+        }
+        #edit-modal-box {
+            background: #111113;
+            border: 1px solid #27272a;
+            border-radius: 24px;
+            padding: 28px;
+            width: 100%;
+            max-width: 460px;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #edit-modal.open #edit-modal-box {
+            transform: translateY(0) scale(1);
+        }
+        .action-btn {
+            transition: all 0.2s ease;
+        }
     </style>
 </head>
 <body class="text-slate-200 antialiased p-3 sm:p-6 md:p-8">
-
     <!-- Loading Overlay -->
     <div id="loading-overlay">
         <div class="spinner mb-4"></div>
         <p class="text-zinc-400 text-sm">Memuat data keuangan...</p>
     </div>
-
     <!-- Toast -->
     <div id="toast"></div>
-
     <!-- Transfer Modal -->
     <div id="transfer-modal">
         <div id="transfer-modal-box">
@@ -249,7 +258,6 @@
                     </svg>
                 </button>
             </div>
-
             <!-- Direction indicator -->
             <div id="modal-direction" class="flex items-center justify-center gap-3 mb-6 p-3 rounded-2xl bg-zinc-900 border border-zinc-800">
                 <div class="flex items-center gap-2">
@@ -266,7 +274,6 @@
                     <span id="modal-to-label" class="text-sm font-medium"></span>
                 </div>
             </div>
-
             <div class="space-y-4">
                 <div>
                     <label class="text-xs text-zinc-400 mb-1.5 block">Tanggal</label>
@@ -281,7 +288,6 @@
                     <input type="number" id="transfer-amount" placeholder="500000" class="w-full rounded-2xl border px-4 py-3 text-sm">
                 </div>
             </div>
-
             <div class="flex gap-3 mt-6">
                 <button onclick="closeTransferModal()" class="flex-1 px-4 py-3 rounded-2xl border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition-all text-sm font-medium">
                     Batal
@@ -293,8 +299,54 @@
         </div>
     </div>
 
-    <div class="max-w-6xl mx-auto">
+    <!-- EDIT TRANSACTION MODAL -->
+    <div id="edit-modal">
+        <div id="edit-modal-box">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-white">Edit Transaksi</h3>
+                <button onclick="closeEditModal()" class="text-zinc-500 hover:text-white transition-colors p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-zinc-400 mb-1.5 block">Tanggal</label>
+                    <input type="date" id="edit-date" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                </div>
+                <div>
+                    <label class="text-xs text-zinc-400 mb-1.5 block">Deskripsi</label>
+                    <input type="text" id="edit-desc" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs text-zinc-400 mb-1.5 block">Tipe</label>
+                        <select id="edit-type" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                            <option value="pemasukan">Pemasukan</option>
+                            <option value="pengeluaran">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-zinc-400 mb-1.5 block">Nominal (Rp)</label>
+                        <input type="number" id="edit-amount" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button onclick="closeEditModal()" 
+                        class="flex-1 px-4 py-3 rounded-2xl border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition-all text-sm font-medium">
+                    Batal
+                </button>
+                <button onclick="saveEditedTransaction()" 
+                        class="flex-1 px-4 py-3 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-all">
+                    💾 Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <header class="mb-6 sm:mb-10 border-b border-zinc-800 pb-5 sm:pb-8">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-6">
@@ -338,9 +390,7 @@
                     <p id="saldo-total-text" class="total-kas-amount">Rp 0</p>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-
                 <!-- Mama Wallet -->
                 <div id="wallet-mama"
                      onclick="selectWallet('mama')"
@@ -371,7 +421,6 @@
                     </div>
                     <div class="absolute top-8 right-8 text-5xl opacity-0 group-hover:opacity-10 transition-opacity">💰</div>
                 </div>
-
                 <!-- Pakde Wallet -->
                 <div id="wallet-pakde"
                      onclick="selectWallet('pakde')"
@@ -407,7 +456,6 @@
 
         <!-- ===== TRANSFER BRIDGE SECTION ===== -->
         <div class="transfer-bridge mb-8 sm:mb-12">
-
             <!-- Loan Status Badge -->
             <div id="loan-status-bar" class="mb-4 sm:mb-6 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-zinc-900/80 border-amber-500/20 loan-badge-pulse">
                 <div class="flex items-center gap-3">
@@ -427,7 +475,6 @@
                     Riwayat Pinjaman
                 </button>
             </div>
-
             <!-- Loan History Panel -->
             <div id="loan-history-panel" class="mb-4 sm:mb-6">
                 <div class="bg-zinc-900 rounded-2xl sm:rounded-3xl border border-zinc-800 overflow-hidden">
@@ -450,7 +497,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Transfer Buttons -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <!-- Mama Pinjam dari Pakde -->
@@ -471,7 +517,6 @@
                         </svg>
                     </div>
                 </button>
-
                 <!-- Mama Bayar ke Pakde -->
                 <button onclick="openTransferModal('repay')"
                         class="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border-2 border-dashed border-emerald-500/30 hover:border-emerald-400/60 bg-emerald-950/10 hover:bg-emerald-950/20 transition-all text-left">
@@ -493,7 +538,7 @@
             </div>
         </div>
 
-        <!-- LEDGER PANEL (hidden by default, slides down on wallet click) -->
+        <!-- LEDGER PANEL -->
         <div id="ledger-panel">
             <div id="ledger-inner">
                 <!-- Tabs -->
@@ -559,6 +604,7 @@
                                         <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right hidden sm:table-cell whitespace-nowrap">Pemasukan</th>
                                         <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right hidden sm:table-cell whitespace-nowrap">Pengeluaran</th>
                                         <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right whitespace-nowrap">Saldo</th>
+                                        <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right whitespace-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="body-mama" class="divide-y divide-zinc-800"></tbody>
@@ -616,6 +662,7 @@
                                         <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right hidden sm:table-cell whitespace-nowrap">Pemasukan</th>
                                         <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right hidden sm:table-cell whitespace-nowrap">Pengeluaran</th>
                                         <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right whitespace-nowrap">Saldo</th>
+                                        <th class="px-4 sm:px-8 py-3 sm:py-6 font-medium text-zinc-400 text-right whitespace-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="body-pakde" class="divide-y divide-zinc-800"></tbody>
@@ -625,8 +672,7 @@
                 </div>
             </div>
         </div>
-
-    </div><!-- end max-w-6xl -->
+    </div>
 
     <script>
         // =============================================
@@ -635,15 +681,13 @@
         const JSONBIN_BIN_ID = '69dfd38a36566621a8b8e7e5';
         const JSONBIN_API_KEY = '$2a$10$aOMy.0xdjfpp1ly5ZZWtCuD65YDOf8msitXmJj2FDeS5XT1AQcN1y';
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
-
         const initialDataMama = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Uang Belanja", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 61789281.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Ambil Uang Sangu Cash", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 61739281.0}, {"Tanggal": "9 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 61439281.0}, {"Tanggal": "16 Februari 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60939281.0}, {"Tanggal": "1 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 60639281.0}, {"Tanggal": "5 Maret 2025", "Deskripsi": "Cash 300, Brimo TF 200", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 60139281.0}, {"Tanggal": "10 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59639281.0}, {"Tanggal": "11 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 59139281.0}, {"Tanggal": "19 Maret 2025", "Deskripsi": "Ambil Uang Pulang Sukoharjo", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 57639281.0}, {"Tanggal": "21 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 54139281.0}, {"Tanggal": "26 Maret 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 53139281.0}, {"Tanggal": "2025-04-25", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 3501839.0, "Saldo": 49637442.0}, {"Tanggal": "15 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 10001656.0, "Saldo": 39635786.0}, {"Tanggal": "30 Juni 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 39335786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 36835786.0}, {"Tanggal": "3 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3196.0, "Saldo": 36832590.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 36332590.0}, {"Tanggal": "14 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 35832590.0}, {"Tanggal": "19 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 35532590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 33032590.0}, {"Tanggal": "22 Juli 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3656.0, "Saldo": 33028934.0}, {"Tanggal": "04 Agustus 2025", "Deskripsi": "Servis Mobil", "Pemasukan": 0, "Pengeluaran": 2150000.0, "Saldo": 30878934.0}, {"Tanggal": "09 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 700000.0, "Saldo": 30178934.0}, {"Tanggal": "14 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 29878934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 29378934.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Admin Bank", "Pemasukan": 0, "Pengeluaran": 3956.0, "Saldo": 29374978.0}, {"Tanggal": "22 Agustus 2025", "Deskripsi": "Bayar Angsuran + Listrik+PDAM", "Pemasukan": 0, "Pengeluaran": 3000000.0, "Saldo": 26374978.0}, {"Tanggal": "27 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 25874978.0}, {"Tanggal": "28 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 24874978.0}, {"Tanggal": "30 Agustus 2025", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24374978.0}, {"Tanggal": "2025-09-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23874978.0}, {"Tanggal": "2025-09-02", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 23374978.0}, {"Tanggal": "2025-09-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 20874978.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 20674978.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Uang Pinjam Mbak Santi", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 19674978.0}, {"Tanggal": "2025-10-04", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 19374978.0}, {"Tanggal": "2025-10-05", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 18974978.0}, {"Tanggal": "2025-10-08", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 18474978.0}, {"Tanggal": "2025-10-13", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 18174978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 400000.0, "Saldo": 17774978.0}, {"Tanggal": "2025-10-15", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 214000.0, "Saldo": 17560978.0}, {"Tanggal": "2025-10-17", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 16560978.0}, {"Tanggal": "2025-10-16", "Deskripsi": "Debit Freshmart", "Pemasukan": 0, "Pengeluaran": 215200.0, "Saldo": 16345778.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 16295778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2500000.0, "Saldo": 13795778.0}, {"Tanggal": "2025-10-20", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 13595778.0}, {"Tanggal": "2025-11-01", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 518100.0, "Saldo": 13077678.0}, {"Tanggal": "2025-11-11", "Deskripsi": "Bayar Denda PLN", "Pemasukan": 0, "Pengeluaran": 6801750.0, "Saldo": 6275928.0}, {"Tanggal": "2025-11-05", "Deskripsi": "Bobby Narik ATM", "Pemasukan": 0, "Pengeluaran": 50000.0, "Saldo": 6225928.0}, {"Tanggal": "2025-11-23", "Deskripsi": "Transfer Bayar Bank Jateng", "Pemasukan": 0, "Pengeluaran": 2400000.0, "Saldo": 3825928.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Pembayaran tagihan PLN, PDAM, dan Bank Jateng via pindah rekening.", "Pemasukan": 0, "Pengeluaran": 3500000.0, "Saldo": 325928.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Handoko Bayar Kontrakan", "Pemasukan": 15000000.0, "Pengeluaran": 0, "Saldo": 15325928.0}, {"Tanggal": "2025-01-02", "Deskripsi": "Servis LCD Laptop", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 15025928.0}, {"Tanggal": "2025-01-24", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 14525928.0}, {"Tanggal": "2025-01-16", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 250000.0, "Saldo": 14275928.0}, {"Tanggal": "2025-01-26", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 137000.0, "Saldo": 14138928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Ambil Uang Sangu Piknik", "Pemasukan": 0, "Pengeluaran": 600000.0, "Saldo": 13538928.0}, {"Tanggal": "2025-01-31", "Deskripsi": "Bayar Bengkel Ganti Oli Mobil", "Pemasukan": 0, "Pengeluaran": 895500.0, "Saldo": 12643428.0}, {"Tanggal": "2025-01-18", "Deskripsi": "Total Pengeluaran Tidak Tercatat", "Pemasukan": 0, "Pengeluaran": 813000.0, "Saldo": 11830428.0}, {"Tanggal": "2026-02-07", "Deskripsi": "Bayar Servis AC", "Pemasukan": 0, "Pengeluaran": 750000.0, "Saldo": 11080428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 10880428.0}, {"Tanggal": "2026-02-06", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 10380428.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Bayar Freshmart", "Pemasukan": 0, "Pengeluaran": 159000.0, "Saldo": 10221428.0}, {"Tanggal": "2026-02-14", "Deskripsi": "Mama Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9721428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Mama Ambil Uang Arisan", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 9521428.0}, {"Tanggal": "2026-02-15", "Deskripsi": "Ambil Uang di Sukoharjo", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 9021428.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Belanja Freshmart", "Pemasukan": 0, "Pengeluaran": 137500.0, "Saldo": 8883928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 8683928.0}, {"Tanggal": "2026-02-20", "Deskripsi": "Bayar PLN + PDAM", "Pemasukan": 0, "Pengeluaran": 1500000.0, "Saldo": 7183928.0}, {"Tanggal": "2026-02-22", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 6683928.0}, {"Tanggal": "2026-03-01", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 6483928.0}, {"Tanggal": "2026-03-02", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 6183928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Ambil Uang Lebaran", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 5183928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 4883928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Ambil Uang Cash Lebaran", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 4383928.0}, {"Tanggal": "2026-03-21", "Deskripsi": "Transfer Brimo Lebaran", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 2383928.0}, {"Tanggal": "2026-03-18", "Deskripsi": "Freshmart Sebelum Lebaran", "Pemasukan": 0, "Pengeluaran": 292900.0, "Saldo": 2091028.0}, {"Tanggal": "2026-03-24", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 1891028.0}, {"Tanggal": "2026-04-11", "Deskripsi": "Ambil Cash", "Pemasukan": 0, "Pengeluaran": 1510800.0, "Saldo": 380228.0}];
         const initialDataPakde = [{"Tanggal": "3 Februari 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 33998317.0}, {"Tanggal": "4 Februari 2025", "Deskripsi": "Tante Yuni Transfer", "Pemasukan": 25000000.0, "Pengeluaran": 0, "Saldo": 58998317.0}, {"Tanggal": "2025-05-20", "Deskripsi": "Mas Bagas Pinjam", "Pemasukan": 0, "Pengeluaran": 30000000.0, "Saldo": 28998317.0}, {"Tanggal": "12 Juni 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 1000000.0, "Saldo": 27998317.0}, {"Tanggal": "2 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27798317.0}, {"Tanggal": "10 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 27598317.0}, {"Tanggal": "15 Juli 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 27098317.0}, {"Tanggal": "1 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26598317.0}, {"Tanggal": "18 Agustus 2025", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 26098317.0}, {"Tanggal": "2025-09-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25798317.0}, {"Tanggal": "2025-09-22", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 300000.0, "Saldo": 25498317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 100000.0, "Saldo": 25398317.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 7016.0, "Saldo": 25391301.0}, {"Tanggal": "2025-09-28", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 25191301.0}, {"Tanggal": "2025-10-12", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24991301.0}, {"Tanggal": "2025-10-19", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 24791301.0}, {"Tanggal": "2025-11-10", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 150000.0, "Saldo": 24641301.0}, {"Tanggal": "2025-11-13", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 500000.0, "Saldo": 24141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 2000000.0, "Saldo": 22141301.0}, {"Tanggal": "2025-12-03", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 13000.0, "Saldo": 22128301.0}, {"Tanggal": "2025-12-20", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 22119301.0}, {"Tanggal": "2025-12-31", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21919301.0}, {"Tanggal": "2026-01-23", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21719301.0}, {"Tanggal": "2026-02-09", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21519301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 4000.0, "Saldo": 21515301.0}, {"Tanggal": "2026-02-08", "Deskripsi": "Admin Bank ", "Pemasukan": 0, "Pengeluaran": 9000.0, "Saldo": 21506301.0}, {"Tanggal": "2026-03-30", "Deskripsi": "Pakde Ambil Uang", "Pemasukan": 0, "Pengeluaran": 200000.0, "Saldo": 21092301.0}];
-
         let dataMama = [];
         let dataPakde = [];
-        let dataLoans = []; // [{date, desc, amount, type: 'borrow'|'repay'}]
+        let dataLoans = [];
         let currentWallet = null;
-        let transferMode = null; // 'borrow' | 'repay'
+        let transferMode = null;
 
         // ============ JSONBIN HELPERS ============
         async function loadFromCloud() {
@@ -716,8 +760,6 @@
             }, 0);
             const el = document.getElementById('loan-outstanding-text');
             el.innerText = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(Math.max(0, outstanding));
-
-            // Change badge color if fully settled
             const bar = document.getElementById('loan-status-bar');
             if (outstanding <= 0 && dataLoans.length > 0) {
                 bar.classList.remove('border-amber-500/20', 'loan-badge-pulse');
@@ -730,17 +772,19 @@
             }
         };
 
-        const renderLedger = (data, elementId) => {
+        // ==================== UPDATED RENDERLEDGER WITH EDIT/DELETE ====================
+        const renderLedger = (data, elementId, person) => {
             const tbody = document.getElementById(elementId);
             let html = '';
-            data.forEach(row => {
+            data.forEach((row, index) => {
                 if (!row.Deskripsi && row.Saldo === 0) return;
                 const signed = row.Pemasukan > 0
                     ? `<span class="text-emerald-400 font-medium">+${formatRp(row.Pemasukan)}</span>`
                     : `<span class="text-red-400 font-medium">-${formatRp(row.Pengeluaran)}</span>`;
-                // Highlight transfer rows
+
                 const isTransfer = row.Deskripsi && (row.Deskripsi.startsWith('🤝') || row.Deskripsi.startsWith('✅'));
                 const rowClass = isTransfer ? 'bg-amber-950/20 hover:bg-amber-950/30' : 'hover:bg-zinc-800/70';
+
                 html += `<tr class="${rowClass} transition-colors">
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-zinc-400 text-xs sm:text-sm whitespace-nowrap">${row.Tanggal}</td>
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-white text-xs sm:text-sm">
@@ -750,9 +794,15 @@
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-right text-emerald-400 font-medium text-sm hidden sm:table-cell">${formatRp(row.Pemasukan)}</td>
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-right text-red-400 font-medium text-sm hidden sm:table-cell">${formatRp(row.Pengeluaran)}</td>
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-right font-semibold text-white text-xs sm:text-sm whitespace-nowrap">${formatRp(row.Saldo)}</td>
+                    <td class="px-4 sm:px-8 py-3 sm:py-5 text-right whitespace-nowrap">
+                        <button onclick="editTransaction('${person}', ${index})" 
+                                class="action-btn text-violet-400 hover:text-violet-300 text-xl mr-2">✏️</button>
+                        <button onclick="deleteTransaction('${person}', ${index})" 
+                                class="action-btn text-red-400 hover:text-red-300 text-xl">🗑️</button>
+                    </td>
                 </tr>`;
             });
-            tbody.innerHTML = html || '<tr><td colspan="5" class="text-center py-10 text-zinc-500">Belum ada transaksi</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6" class="text-center py-10 text-zinc-500">Belum ada transaksi</td></tr>';
         };
 
         const renderLoanHistory = () => {
@@ -825,11 +875,9 @@
                 descInput.placeholder = 'Contoh: Bayar hutang bulan lalu';
             }
 
-            // Set today's date
             document.getElementById('transfer-date').valueAsDate = new Date();
             document.getElementById('transfer-desc').value = '';
             document.getElementById('transfer-amount').value = '';
-
             modal.classList.add('open');
         };
 
@@ -838,7 +886,6 @@
             transferMode = null;
         };
 
-        // Close modal on backdrop click
         document.getElementById('transfer-modal').addEventListener('click', function(e) {
             if (e.target === this) closeTransferModal();
         });
@@ -847,12 +894,10 @@
             const dateVal = document.getElementById('transfer-date').value;
             const descRaw = document.getElementById('transfer-desc').value.trim();
             const amountVal = parseFloat(document.getElementById('transfer-amount').value);
-
             if (!dateVal || isNaN(amountVal) || amountVal <= 0) {
                 alert('Mohon lengkapi tanggal dan nominal dengan benar!');
                 return;
             }
-
             const isBorrow = transferMode === 'borrow';
             const defaultDesc = isBorrow ? 'Mama Pinjam ke Pakde' : 'Mama Bayar ke Pakde';
             const desc = descRaw || defaultDesc;
@@ -863,24 +908,20 @@
             const curPakde = dataPakde.length > 0 ? dataPakde[0].Saldo : 0;
 
             if (isBorrow) {
-                // Pakde keluar → Mama masuk
                 dataPakde.unshift({ Tanggal: dateVal, Deskripsi: pakdeDesc, Pemasukan: 0, Pengeluaran: amountVal, Saldo: curPakde - amountVal });
                 dataMama.unshift({ Tanggal: dateVal, Deskripsi: mamaDesc, Pemasukan: amountVal, Pengeluaran: 0, Saldo: curMama + amountVal });
             } else {
-                // Mama keluar → Pakde masuk
                 dataMama.unshift({ Tanggal: dateVal, Deskripsi: mamaDesc, Pemasukan: 0, Pengeluaran: amountVal, Saldo: curMama - amountVal });
                 dataPakde.unshift({ Tanggal: dateVal, Deskripsi: pakdeDesc, Pemasukan: amountVal, Pengeluaran: 0, Saldo: curPakde + amountVal });
             }
 
-            // Record in loan history
             dataLoans.unshift({ date: dateVal, desc: mamaDesc, amount: amountVal, type: isBorrow ? 'borrow' : 'repay' });
 
             closeTransferModal();
-            renderLedger(dataMama, 'body-mama');
-            renderLedger(dataPakde, 'body-pakde');
+            renderLedger(dataMama, 'body-mama', 'mama');
+            renderLedger(dataPakde, 'body-pakde', 'pakde');
             renderLoanHistory();
             updateSummary();
-
             showToast('💾 Menyimpan ke cloud...');
             await saveToCloud();
             showToast(isBorrow ? '🤝 Pinjaman berhasil dicatat!' : '✅ Pembayaran berhasil dicatat!');
@@ -891,10 +932,8 @@
             const mC = document.getElementById('wallet-mama');
             const pC = document.getElementById('wallet-pakde');
             const panel = document.getElementById('ledger-panel');
-
             mC.classList.remove('opened', 'active-mama');
             pC.classList.remove('opened', 'active-pakde');
-
             if (person === 'mama') {
                 mC.classList.add('opened', 'active-mama');
             } else {
@@ -912,11 +951,9 @@
                 else pC.classList.remove('active-pakde');
                 return;
             }
-
             currentWallet = person;
             switchLedgerTab(person);
             panel.classList.add('open');
-
             setTimeout(() => {
                 panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 200);
@@ -927,7 +964,6 @@
             const pakdeLedger = document.getElementById('ledger-pakde');
             const btnMama = document.getElementById('tab-btn-mama');
             const btnPakde = document.getElementById('tab-btn-pakde');
-
             if (person === 'mama') {
                 mamaLedger.classList.remove('hidden');
                 pakdeLedger.classList.add('hidden');
@@ -955,7 +991,7 @@
             const pm = typeVal === 'pemasukan' ? amountVal : 0;
             const pk = typeVal === 'pengeluaran' ? amountVal : 0;
             dataArr.unshift({ Tanggal: dateVal, Deskripsi: descVal, Pemasukan: pm, Pengeluaran: pk, Saldo: cur + pm - pk });
-            renderLedger(dataArr, `body-${person}`);
+            renderLedger(dataArr, `body-${person}`, person);
             updateSummary();
             showToast('💾 Menyimpan ke cloud...');
             await saveToCloud();
@@ -984,6 +1020,105 @@
             document.getElementById(`${person}-amount-m`).value = '';
         };
 
+        // ==================== EDIT & DELETE FEATURE ====================
+        let editingPerson = null;
+        let editingIndex = -1;
+
+        window.editTransaction = function(person, index) {
+            editingPerson = person;
+            editingIndex = index;
+            const data = person === 'mama' ? dataMama : dataPakde;
+            const row = data[index];
+
+            // Try to set date (only works if already in YYYY-MM-DD format)
+            const dateInput = document.getElementById('edit-date');
+            if (row.Tanggal.includes('-')) {
+                dateInput.value = row.Tanggal;
+            } else {
+                dateInput.value = '';
+            }
+
+            document.getElementById('edit-desc').value = row.Deskripsi || '';
+            document.getElementById('edit-type').value = row.Pemasukan > 0 ? 'pemasukan' : 'pengeluaran';
+            document.getElementById('edit-amount').value = row.Pemasukan > 0 ? row.Pemasukan : row.Pengeluaran;
+
+            document.getElementById('edit-modal').classList.add('open');
+        };
+
+        window.closeEditModal = function() {
+            document.getElementById('edit-modal').classList.remove('open');
+            editingPerson = null;
+            editingIndex = -1;
+        };
+
+        document.getElementById('edit-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeEditModal();
+        });
+
+        window.saveEditedTransaction = async function() {
+            if (editingPerson === null || editingIndex === -1) return;
+
+            const dateVal = document.getElementById('edit-date').value;
+            const descVal = document.getElementById('edit-desc').value.trim();
+            const typeVal = document.getElementById('edit-type').value;
+            const amountVal = parseFloat(document.getElementById('edit-amount').value);
+
+            if (!dateVal || !descVal || isNaN(amountVal) || amountVal <= 0) {
+                alert("Mohon isi semua field dengan benar!");
+                return;
+            }
+
+            const dataArr = editingPerson === 'mama' ? dataMama : dataPakde;
+            const pm = typeVal === 'pemasukan' ? amountVal : 0;
+            const pk = typeVal === 'pengeluaran' ? amountVal : 0;
+
+            dataArr[editingIndex].Tanggal = dateVal;
+            dataArr[editingIndex].Deskripsi = descVal;
+            dataArr[editingIndex].Pemasukan = pm;
+            dataArr[editingIndex].Pengeluaran = pk;
+
+            recalculateBalances(dataArr);
+
+            renderLedger(dataMama, 'body-mama', 'mama');
+            renderLedger(dataPakde, 'body-pakde', 'pakde');
+            updateSummary();
+
+            closeEditModal();
+            showToast('✅ Perubahan berhasil disimpan!');
+            await saveToCloud();
+        };
+
+        window.deleteTransaction = async function(person, index) {
+            if (!confirm("Hapus transaksi ini secara permanen?")) return;
+
+            const dataArr = person === 'mama' ? dataMama : dataPakde;
+            dataArr.splice(index, 1);
+
+            recalculateBalances(dataArr);
+
+            renderLedger(dataMama, 'body-mama', 'mama');
+            renderLedger(dataPakde, 'body-pakde', 'pakde');
+            updateSummary();
+
+            showToast('🗑️ Transaksi dihapus');
+            await saveToCloud();
+        };
+
+        // Helper: recalculate all running balances correctly
+        function recalculateBalances(data) {
+            if (data.length === 0) return;
+            // Work on a copy in oldest-first order
+            let temp = [...data].reverse();
+            let running = 0;
+            for (let row of temp) {
+                running += (row.Pemasukan || 0) - (row.Pengeluaran || 0);
+                row.Saldo = Math.round(running * 100) / 100;
+            }
+            // Put back to newest-first
+            data.length = 0;
+            data.push(...temp.reverse());
+        }
+
         window.resetData = async function() {
             if (confirm("⚠️ Reset semua data ke posisi awal?\nSemua transaksi baru akan hilang.")) {
                 dataMama = [...initialDataMama].reverse();
@@ -991,8 +1126,8 @@
                 dataLoans = [];
                 showToast('🔄 Mereset data...');
                 await saveToCloud();
-                renderLedger(dataMama, 'body-mama');
-                renderLedger(dataPakde, 'body-pakde');
+                renderLedger(dataMama, 'body-mama', 'mama');
+                renderLedger(dataPakde, 'body-pakde', 'pakde');
                 renderLoanHistory();
                 updateSummary();
                 showToast('✅ Data berhasil direset!');
@@ -1003,8 +1138,8 @@
         async function init() {
             const overlay = document.getElementById('loading-overlay');
             await loadFromCloud();
-            renderLedger(dataMama, 'body-mama');
-            renderLedger(dataPakde, 'body-pakde');
+            renderLedger(dataMama, 'body-mama', 'mama');
+            renderLedger(dataPakde, 'body-pakde', 'pakde');
             renderLoanHistory();
             updateSummary();
 
