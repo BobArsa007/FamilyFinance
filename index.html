@@ -163,6 +163,65 @@
             transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         #toast.show { transform: translateY(0); opacity: 1; }
+
+        /* === TRANSFER BRIDGE === */
+        .transfer-bridge {
+            animation: fadeInUp 0.9s ease 0.2s both;
+        }
+
+        /* Arrow animation */
+        @keyframes arrowSlide {
+            0%, 100% { transform: translateX(0); opacity: 0.6; }
+            50% { transform: translateX(6px); opacity: 1; }
+        }
+        .arrow-anim { animation: arrowSlide 1.5s ease-in-out infinite; }
+
+        /* Loan badge pulse */
+        @keyframes loanPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.3); }
+            50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
+        }
+        .loan-badge-pulse { animation: loanPulse 2.5s ease-in-out infinite; }
+
+        /* Modal overlay */
+        #transfer-modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 16px;
+        }
+        #transfer-modal.open {
+            opacity: 1; pointer-events: all;
+        }
+        #transfer-modal-box {
+            background: #111113;
+            border: 1px solid #27272a;
+            border-radius: 24px;
+            padding: 28px;
+            width: 100%;
+            max-width: 460px;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #transfer-modal.open #transfer-modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        /* Loan history panel */
+        #loan-history-panel {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        }
+        #loan-history-panel.open {
+            max-height: 800px;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="text-slate-200 antialiased p-3 sm:p-6 md:p-8">
@@ -175,6 +234,64 @@
 
     <!-- Toast -->
     <div id="toast"></div>
+
+    <!-- Transfer Modal -->
+    <div id="transfer-modal">
+        <div id="transfer-modal-box">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 id="modal-title" class="text-lg font-semibold text-white">Transfer Antar Dompet</h3>
+                    <p id="modal-subtitle" class="text-xs text-zinc-400 mt-0.5"></p>
+                </div>
+                <button onclick="closeTransferModal()" class="text-zinc-500 hover:text-white transition-colors p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Direction indicator -->
+            <div id="modal-direction" class="flex items-center justify-center gap-3 mb-6 p-3 rounded-2xl bg-zinc-900 border border-zinc-800">
+                <div class="flex items-center gap-2">
+                    <span id="modal-from-emoji" class="text-2xl"></span>
+                    <span id="modal-from-label" class="text-sm font-medium"></span>
+                </div>
+                <div class="flex items-center gap-1 text-zinc-400 arrow-anim">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="modal-to-emoji" class="text-2xl"></span>
+                    <span id="modal-to-label" class="text-sm font-medium"></span>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-zinc-400 mb-1.5 block">Tanggal</label>
+                    <input type="date" id="transfer-date" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                </div>
+                <div>
+                    <label class="text-xs text-zinc-400 mb-1.5 block">Keterangan (opsional)</label>
+                    <input type="text" id="transfer-desc" placeholder="Contoh: Pinjam untuk keperluan dapur" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                </div>
+                <div>
+                    <label class="text-xs text-zinc-400 mb-1.5 block">Nominal (Rp)</label>
+                    <input type="number" id="transfer-amount" placeholder="500000" class="w-full rounded-2xl border px-4 py-3 text-sm">
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeTransferModal()" class="flex-1 px-4 py-3 rounded-2xl border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition-all text-sm font-medium">
+                    Batal
+                </button>
+                <button id="modal-confirm-btn" onclick="confirmTransfer()" class="flex-1 px-4 py-3 rounded-2xl text-white text-sm font-semibold transition-all">
+                    Konfirmasi
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="max-w-6xl mx-auto">
 
@@ -207,7 +324,7 @@
         </header>
 
         <!-- WALLET SECTION -->
-        <div class="wallet-section mb-8 sm:mb-12">
+        <div class="wallet-section mb-6 sm:mb-8">
             <div class="flex flex-col xs:flex-row items-start justify-between gap-3 mb-5 sm:mb-8">
                 <h2 class="text-lg sm:text-3xl font-semibold flex items-center gap-2">
                     <span class="text-2xl sm:text-4xl">👛</span>
@@ -288,6 +405,94 @@
             </div>
         </div>
 
+        <!-- ===== TRANSFER BRIDGE SECTION ===== -->
+        <div class="transfer-bridge mb-8 sm:mb-12">
+
+            <!-- Loan Status Badge -->
+            <div id="loan-status-bar" class="mb-4 sm:mb-6 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-zinc-900/80 border-amber-500/20 loan-badge-pulse">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                        <span class="text-lg">🤝</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-amber-400 tracking-wide uppercase">Hutang Mama ke Pakde</p>
+                        <p id="loan-outstanding-text" class="text-xl sm:text-2xl font-bold text-white tabular-nums mt-0.5">Rp 0</p>
+                    </div>
+                </div>
+                <button onclick="toggleLoanHistory()"
+                        class="flex items-center gap-2 text-xs font-medium text-zinc-400 hover:text-amber-400 transition-colors self-start sm:self-auto px-3 py-2 rounded-xl hover:bg-zinc-800">
+                    <svg id="loan-history-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                    Riwayat Pinjaman
+                </button>
+            </div>
+
+            <!-- Loan History Panel -->
+            <div id="loan-history-panel" class="mb-4 sm:mb-6">
+                <div class="bg-zinc-900 rounded-2xl sm:rounded-3xl border border-zinc-800 overflow-hidden">
+                    <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-zinc-800 flex items-center gap-2">
+                        <span class="text-amber-400 text-sm">📋</span>
+                        <h4 class="text-sm font-semibold text-white">Riwayat Transfer Antar Dompet</h4>
+                    </div>
+                    <div class="overflow-x-auto max-h-64">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="border-b border-zinc-800">
+                                <tr>
+                                    <th class="px-4 sm:px-6 py-3 font-medium text-zinc-400 whitespace-nowrap">Tanggal</th>
+                                    <th class="px-4 sm:px-6 py-3 font-medium text-zinc-400">Keterangan</th>
+                                    <th class="px-4 sm:px-6 py-3 font-medium text-zinc-400 text-right whitespace-nowrap">Nominal</th>
+                                    <th class="px-4 sm:px-6 py-3 font-medium text-zinc-400 text-right whitespace-nowrap">Tipe</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loan-history-body" class="divide-y divide-zinc-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <!-- Mama Pinjam dari Pakde -->
+                <button onclick="openTransferModal('borrow')"
+                        class="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border-2 border-dashed border-amber-500/30 hover:border-amber-400/60 bg-amber-950/10 hover:bg-amber-950/20 transition-all text-left">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 group-hover:bg-amber-500/20 border border-amber-500/20 flex items-center justify-center shrink-0 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-white text-sm sm:text-base">Mama Pinjam ke Pakde</p>
+                        <p class="text-xs text-zinc-400 mt-0.5">Uang keluar dari Pakde → masuk ke Mama</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-amber-400/60 group-hover:text-amber-400 transition-colors arrow-anim">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </button>
+
+                <!-- Mama Bayar ke Pakde -->
+                <button onclick="openTransferModal('repay')"
+                        class="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border-2 border-dashed border-emerald-500/30 hover:border-emerald-400/60 bg-emerald-950/10 hover:bg-emerald-950/20 transition-all text-left">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 group-hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center shrink-0 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-white text-sm sm:text-base">Mama Bayar ke Pakde</p>
+                        <p class="text-xs text-zinc-400 mt-0.5">Uang keluar dari Mama → kembali ke Pakde</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-emerald-400/60 group-hover:text-emerald-400 transition-colors arrow-anim">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+
         <!-- LEDGER PANEL (hidden by default, slides down on wallet click) -->
         <div id="ledger-panel">
             <div id="ledger-inner">
@@ -337,7 +542,7 @@
                                 </select></div>
                             <div class="col-span-2"><label class="text-xs text-zinc-400 mb-1.5 block">Deskripsi</label>
                                 <input type="text" id="mama-desc-m" placeholder="Contoh: Belanja bulanan" class="w-full rounded-xl border px-3 py-3 text-sm"></div>
-<div><label class="text-xs text-zinc-400 mb-1.5 block">Nominal (Rp)</label>
+                            <div><label class="text-xs text-zinc-400 mb-1.5 block">Nominal (Rp)</label>
                                 <input type="number" id="mama-amount-m" placeholder="500000" class="w-full rounded-xl border px-3 py-3 text-sm"></div>
                             <div class="flex items-end"><button onclick="addTransactionMobile('mama')"
                                     class="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-3 rounded-xl text-sm font-semibold transition-colors">
@@ -436,7 +641,9 @@
 
         let dataMama = [];
         let dataPakde = [];
+        let dataLoans = []; // [{date, desc, amount, type: 'borrow'|'repay'}]
         let currentWallet = null;
+        let transferMode = null; // 'borrow' | 'repay'
 
         // ============ JSONBIN HELPERS ============
         async function loadFromCloud() {
@@ -450,15 +657,18 @@
                 if (!record.dataMama || record.dataMama.length === 0) {
                     dataMama = [...initialDataMama].reverse();
                     dataPakde = [...initialDataPakde].reverse();
+                    dataLoans = [];
                     await saveToCloud();
                 } else {
                     dataMama = record.dataMama;
                     dataPakde = record.dataPakde;
+                    dataLoans = record.dataLoans || [];
                 }
             } catch (e) {
                 console.warn('Cloud load failed, using initial data', e);
                 dataMama = [...initialDataMama].reverse();
                 dataPakde = [...initialDataPakde].reverse();
+                dataLoans = [];
             }
         }
 
@@ -470,7 +680,7 @@
                         'Content-Type': 'application/json',
                         'X-Master-Key': JSONBIN_API_KEY
                     },
-                    body: JSON.stringify({ dataMama, dataPakde })
+                    body: JSON.stringify({ dataMama, dataPakde, dataLoans })
                 });
             } catch (e) {
                 console.warn('Cloud save failed', e);
@@ -497,6 +707,27 @@
             document.getElementById('saldo-mama-text').innerText = formatRp(sM) || 'Rp 0';
             document.getElementById('saldo-pakde-text').innerText = formatRp(sP) || 'Rp 0';
             document.getElementById('saldo-total-text').innerText = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(sM + sP);
+            updateLoanBadge();
+        };
+
+        const updateLoanBadge = () => {
+            const outstanding = dataLoans.reduce((acc, l) => {
+                return l.type === 'borrow' ? acc + l.amount : acc - l.amount;
+            }, 0);
+            const el = document.getElementById('loan-outstanding-text');
+            el.innerText = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(Math.max(0, outstanding));
+
+            // Change badge color if fully settled
+            const bar = document.getElementById('loan-status-bar');
+            if (outstanding <= 0 && dataLoans.length > 0) {
+                bar.classList.remove('border-amber-500/20', 'loan-badge-pulse');
+                bar.classList.add('border-emerald-500/20');
+                el.classList.add('text-emerald-400');
+            } else {
+                bar.classList.add('border-amber-500/20', 'loan-badge-pulse');
+                bar.classList.remove('border-emerald-500/20');
+                el.classList.remove('text-emerald-400');
+            }
         };
 
         const renderLedger = (data, elementId) => {
@@ -507,7 +738,10 @@
                 const signed = row.Pemasukan > 0
                     ? `<span class="text-emerald-400 font-medium">+${formatRp(row.Pemasukan)}</span>`
                     : `<span class="text-red-400 font-medium">-${formatRp(row.Pengeluaran)}</span>`;
-                html += `<tr class="hover:bg-zinc-800/70 transition-colors">
+                // Highlight transfer rows
+                const isTransfer = row.Deskripsi && (row.Deskripsi.startsWith('🤝') || row.Deskripsi.startsWith('✅'));
+                const rowClass = isTransfer ? 'bg-amber-950/20 hover:bg-amber-950/30' : 'hover:bg-zinc-800/70';
+                html += `<tr class="${rowClass} transition-colors">
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-zinc-400 text-xs sm:text-sm whitespace-nowrap">${row.Tanggal}</td>
                     <td class="px-4 sm:px-8 py-3 sm:py-5 text-white text-xs sm:text-sm">
                         <span class="font-medium">${row.Deskripsi}</span>
@@ -519,6 +753,137 @@
                 </tr>`;
             });
             tbody.innerHTML = html || '<tr><td colspan="5" class="text-center py-10 text-zinc-500">Belum ada transaksi</td></tr>';
+        };
+
+        const renderLoanHistory = () => {
+            const tbody = document.getElementById('loan-history-body');
+            if (dataLoans.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-zinc-500">Belum ada riwayat pinjaman</td></tr>';
+                return;
+            }
+            let html = '';
+            dataLoans.forEach(l => {
+                const isBorrow = l.type === 'borrow';
+                html += `<tr class="hover:bg-zinc-800/70 transition-colors">
+                    <td class="px-4 sm:px-6 py-3 text-zinc-400 text-xs whitespace-nowrap">${l.date}</td>
+                    <td class="px-4 sm:px-6 py-3 text-white text-xs">${l.desc}</td>
+                    <td class="px-4 sm:px-6 py-3 text-right font-semibold text-xs whitespace-nowrap ${isBorrow ? 'text-amber-400' : 'text-emerald-400'}">${formatRp(l.amount)}</td>
+                    <td class="px-4 sm:px-6 py-3 text-right text-xs whitespace-nowrap">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${isBorrow ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'}">
+                            ${isBorrow ? '🤝 Pinjam' : '✅ Bayar'}
+                        </span>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        };
+
+        // ============ LOAN HISTORY TOGGLE ============
+        window.toggleLoanHistory = function() {
+            const panel = document.getElementById('loan-history-panel');
+            const chevron = document.getElementById('loan-history-chevron');
+            panel.classList.toggle('open');
+            chevron.style.transform = panel.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        };
+
+        // ============ TRANSFER MODAL ============
+        window.openTransferModal = function(mode) {
+            transferMode = mode;
+            const modal = document.getElementById('transfer-modal');
+            const title = document.getElementById('modal-title');
+            const subtitle = document.getElementById('modal-subtitle');
+            const fromEmoji = document.getElementById('modal-from-emoji');
+            const fromLabel = document.getElementById('modal-from-label');
+            const toEmoji = document.getElementById('modal-to-emoji');
+            const toLabel = document.getElementById('modal-to-label');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            const descInput = document.getElementById('transfer-desc');
+
+            if (mode === 'borrow') {
+                title.textContent = 'Mama Pinjam ke Pakde';
+                subtitle.textContent = 'Uang keluar dari Pakde, masuk ke Mama';
+                fromEmoji.textContent = '🧔';
+                fromLabel.textContent = 'Pakde Wallet';
+                fromLabel.className = 'text-sm font-medium text-emerald-400';
+                toEmoji.textContent = '👩';
+                toLabel.textContent = 'Mama Wallet';
+                toLabel.className = 'text-sm font-medium text-blue-400';
+                confirmBtn.className = 'flex-1 px-4 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold transition-all';
+                confirmBtn.textContent = '🤝 Konfirmasi Pinjam';
+                descInput.placeholder = 'Contoh: Pinjam untuk keperluan dapur';
+            } else {
+                title.textContent = 'Mama Bayar ke Pakde';
+                subtitle.textContent = 'Uang keluar dari Mama, kembali ke Pakde';
+                fromEmoji.textContent = '👩';
+                fromLabel.textContent = 'Mama Wallet';
+                fromLabel.className = 'text-sm font-medium text-blue-400';
+                toEmoji.textContent = '🧔';
+                toLabel.textContent = 'Pakde Wallet';
+                toLabel.className = 'text-sm font-medium text-emerald-400';
+                confirmBtn.className = 'flex-1 px-4 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold transition-all';
+                confirmBtn.textContent = '✅ Konfirmasi Bayar';
+                descInput.placeholder = 'Contoh: Bayar hutang bulan lalu';
+            }
+
+            // Set today's date
+            document.getElementById('transfer-date').valueAsDate = new Date();
+            document.getElementById('transfer-desc').value = '';
+            document.getElementById('transfer-amount').value = '';
+
+            modal.classList.add('open');
+        };
+
+        window.closeTransferModal = function() {
+            document.getElementById('transfer-modal').classList.remove('open');
+            transferMode = null;
+        };
+
+        // Close modal on backdrop click
+        document.getElementById('transfer-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeTransferModal();
+        });
+
+        window.confirmTransfer = async function() {
+            const dateVal = document.getElementById('transfer-date').value;
+            const descRaw = document.getElementById('transfer-desc').value.trim();
+            const amountVal = parseFloat(document.getElementById('transfer-amount').value);
+
+            if (!dateVal || isNaN(amountVal) || amountVal <= 0) {
+                alert('Mohon lengkapi tanggal dan nominal dengan benar!');
+                return;
+            }
+
+            const isBorrow = transferMode === 'borrow';
+            const defaultDesc = isBorrow ? 'Mama Pinjam ke Pakde' : 'Mama Bayar ke Pakde';
+            const desc = descRaw || defaultDesc;
+            const mamaDesc = isBorrow ? `🤝 ${desc}` : `✅ ${desc}`;
+            const pakdeDesc = isBorrow ? `🤝 Dipinjam Mama` : `✅ Mama Bayar Hutang`;
+
+            const curMama = dataMama.length > 0 ? dataMama[0].Saldo : 0;
+            const curPakde = dataPakde.length > 0 ? dataPakde[0].Saldo : 0;
+
+            if (isBorrow) {
+                // Pakde keluar → Mama masuk
+                dataPakde.unshift({ Tanggal: dateVal, Deskripsi: pakdeDesc, Pemasukan: 0, Pengeluaran: amountVal, Saldo: curPakde - amountVal });
+                dataMama.unshift({ Tanggal: dateVal, Deskripsi: mamaDesc, Pemasukan: amountVal, Pengeluaran: 0, Saldo: curMama + amountVal });
+            } else {
+                // Mama keluar → Pakde masuk
+                dataMama.unshift({ Tanggal: dateVal, Deskripsi: mamaDesc, Pemasukan: 0, Pengeluaran: amountVal, Saldo: curMama - amountVal });
+                dataPakde.unshift({ Tanggal: dateVal, Deskripsi: pakdeDesc, Pemasukan: amountVal, Pengeluaran: 0, Saldo: curPakde + amountVal });
+            }
+
+            // Record in loan history
+            dataLoans.unshift({ date: dateVal, desc: mamaDesc, amount: amountVal, type: isBorrow ? 'borrow' : 'repay' });
+
+            closeTransferModal();
+            renderLedger(dataMama, 'body-mama');
+            renderLedger(dataPakde, 'body-pakde');
+            renderLoanHistory();
+            updateSummary();
+
+            showToast('💾 Menyimpan ke cloud...');
+            await saveToCloud();
+            showToast(isBorrow ? '🤝 Pinjaman berhasil dicatat!' : '✅ Pembayaran berhasil dicatat!');
         };
 
         // ============ WALLET SELECTION ============
@@ -623,10 +988,12 @@
             if (confirm("⚠️ Reset semua data ke posisi awal?\nSemua transaksi baru akan hilang.")) {
                 dataMama = [...initialDataMama].reverse();
                 dataPakde = [...initialDataPakde].reverse();
+                dataLoans = [];
                 showToast('🔄 Mereset data...');
                 await saveToCloud();
                 renderLedger(dataMama, 'body-mama');
                 renderLedger(dataPakde, 'body-pakde');
+                renderLoanHistory();
                 updateSummary();
                 showToast('✅ Data berhasil direset!');
             }
@@ -638,6 +1005,7 @@
             await loadFromCloud();
             renderLedger(dataMama, 'body-mama');
             renderLedger(dataPakde, 'body-pakde');
+            renderLoanHistory();
             updateSummary();
 
             const today = new Date();
